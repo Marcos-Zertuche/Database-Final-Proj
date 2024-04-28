@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Information for New Section</title>
+</head>
+<form action="/submit-new-learning-objective" method="post">
+    <label for="sectionID">Section ID:</label>
+    <input type="text" id="sectionID" name="sectionID" required><br><br>
+
+    <label for="courseID">Course ID:</label>
+    <input type="text" id="courseID" name="courseID" required><br><br>
+
+    <label for="semester">Semester:</label>
+    <input type="text" id="semester" name="semester" required><br><br>
+
+    <label for="year">Year:</label>
+    <input type="text" id="year" name="year"><br><br>
+
+    <label for="instructorID">Instructor ID:</label>
+    <input type="text" id="instructorID" name="instructorID" required><br><br>
+
+    <label for="numStudents">Number of Students:</label>
+    <input type="number" id="numStudents" name="numStudents" required><br><br>
+    
+    <input type="submit" value="Submit">
+</form>
+</html>
