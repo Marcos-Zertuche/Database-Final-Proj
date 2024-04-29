@@ -4,12 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Desired Course</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<form action="/course-result" method="post">
-    <label for="courseID">Course ID:</label>
-    <input type="text" id="courseID" name="courseID" required><br><br>
-    <label for="courseName">Course Name:</label>
-    <input type="text" id="courseName" name="courseName" required><br><br>
-    <input type="submit" value="Submit">
-</form>
+<body>
+    <form action="/course-result" method="post">
+        <label for="courseID">Course ID:</label>
+        <input type="text" id="courseID" name="courseID" required><br><br>
+        <label for="courseName">Course Name:</label>
+        <input type="text" id="courseName" name="courseName" required><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <button onclick="window.location.href='./query'" class="btn btn-primary mt-3">Go back to query page</button>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</body>
 </html>
