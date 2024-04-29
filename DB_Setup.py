@@ -20,18 +20,17 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-    cursor.execute("DROP TABLE IF EXISTS sample_table")
+    cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
     
-    
- # Creating Level table
+    # Creating Level table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Level (
             DegreeLevel VARCHAR(5),
             PRIMARY KEY (DegreeLevel)
-            
-        )
+        );
     """)
+
     # Creating Degree table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Degree (
@@ -39,7 +38,7 @@ def create_tables():
             DegreeLevel VARCHAR(5),
             PRIMARY KEY (DegreeName, DegreeLevel),
             FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
-        )
+        );
     """)
 
     # Creating Course table
@@ -48,15 +47,38 @@ def create_tables():
             CourseID VARCHAR(8),
             CourseName VARCHAR(50),
             PRIMARY KEY (CourseID)
-        )
+        );
     """)
+
+    # Creating Degree_Course table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Degree_Course (
+            DegreeName VARCHAR(50),
+            DegreeLevel VARCHAR(5),
+            CourseID VARCHAR(8),
+            IsCore BOOLEAN,
+            PRIMARY KEY (DegreeName, DegreeLevel, CourseID, IsCore),
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
+        );
+    """)
+
+    # Creating Instructor table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Instructor (
+            InstructorID VARCHAR(8),
+            InstructorName VARCHAR(50),
+            PRIMARY KEY (InstructorID)
+        );
+    """)
+
     # Creating LearningObjective table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS LearningObjective (
             ObjectiveCode INT AUTO_INCREMENT PRIMARY KEY,
             ObjectiveTitle VARCHAR(120) UNIQUE,
             Description VARCHAR(500)
-        )
+        );
     """)
 
     # Creating LearningObjective_Course table
@@ -67,9 +89,8 @@ def create_tables():
             PRIMARY KEY (LearningObjectiveTitle, CourseID),
             FOREIGN KEY (LearningObjectiveTitle) REFERENCES LearningObjective(ObjectiveTitle),
             FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
-        )
+        );
     """)
-
     
     # Creating Section table
     cursor.execute("""
@@ -80,20 +101,19 @@ def create_tables():
             CourseID VARCHAR(8),
             NumStudents INT,
             InstructorID VARCHAR(8),
-            PRIMARY KEY (SectionID, Semester, CourseID, Year), 
-            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
-                    
-        )
+            PRIMARY KEY (SectionID, Semester, CourseID, Year),
+            INDEX section_index (SectionID, Semester, Year),
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+            FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
+        );
     """)
-
-   
 
     # Creating Evaluation table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Evaluation (
             EvalObjective VARCHAR(50),
             DegreeName VARCHAR(50),
-            DegreeLevel VARCHAR(10),
+            DegreeLevel VARCHAR(5),
             A INT,
             B INT,
             C INT,
@@ -109,28 +129,7 @@ def create_tables():
             FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year), 
             FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel),
             FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
-            
-        )
-    """)
-
-    # Creating Instructor table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Instructor (
-            InstructorID VARCHAR(8),
-            InstructorName VARCHAR(50),
-            PRIMARY KEY (InstructorID)
-        )
-    """)
-
-    # Creating Degree_Course table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Degree_Course (
-            CourseID VARCHAR(10),
-            IsCore BOOLEAN,
-            DegreeLevel VARCHAR(5),
-            PRIMARY KEY (DegreeID, CourseID, IsCore,DegreeLevel),
-            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
-);
+        );
     """)
 
     conn.commit()
