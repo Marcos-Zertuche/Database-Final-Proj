@@ -15,6 +15,9 @@ def create_tables():
     conn = connect_db()
     cursor = conn.cursor()
 
+    # Drop the sample_table if it exists
+    cursor.execute("DROP TABLE IF EXISTS sample_table")
+
     # Creating Evaluation table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Evaluation (
@@ -43,19 +46,6 @@ def create_tables():
             PRIMARY KEY (DegreeName, DegreeLevel)
         )
     """)
-    # Creating Course table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Course (
-            CourseID VARCHAR(8),
-            CourseName VARCHAR(50),
-            CoreClass BOOLEAN,
-            DegreeName VARCHAR(50),
-            DegreeLevel VARCHAR(5),
-            PRIMARY KEY (CourseID),
-            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
-        )
-    """)
-
 
     # Creating LearningObjective table
     cursor.execute("""
@@ -90,7 +80,18 @@ def create_tables():
         )
     """)
 
-    
+    # Creating Course table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Course (
+            CourseID VARCHAR(8),
+            CourseName VARCHAR(50),
+            DegreeName VARCHAR(50),
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (CourseID),
+            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
+        )
+    """)
+
     # Creating Instructor table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Instructor (
@@ -100,8 +101,20 @@ def create_tables():
         )
     """)
 
+    # Creating Degree_Course table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Degree_Course (
+            DegreeID INT AUTO_INCREMENT,
+            CourseNum VARCHAR(10),
+            IsCore BOOLEAN,
+            PRIMARY KEY (DegreeID, CourseNum, IsCore),
+            FOREIGN KEY (CourseNum) REFERENCES Course(CourseID)
+);
+    """)
+
     conn.commit()
     conn.close()
+
 
 
 # Call the function to create tables when the script is executed
