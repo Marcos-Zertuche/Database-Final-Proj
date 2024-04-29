@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-# import DB_Setup as db
+from DB_Setup import Insert_Instructor
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -72,7 +72,7 @@ def Submit_Instructor():
         # Instructor ID is numbers and does not exist
         if not instructorCheck(request.form): return render_template('Error.html')
         
-        # db.Insert_Instructor()
+        Insert_Instructor(request.form)
         
         # print(f"Instructor ID: {request.form['instructorID']}")
         # print(f"Instructor Name: {request.form['instructorName']}")
@@ -130,6 +130,25 @@ def Submit_Level():
         
         if not levelCheck(request.form): return render_template('Error.html')
         return render_template('./Level/submit-level.html')
+    
+@app.route('/enter-evaluation-init', methods=['POST'])
+def Enter_Eval():
+        return render_template('./Evaluation/enter-eval-getsection.html')
+    
+@app.route('/enter-evaluation-section', methods = ['POST'])
+def Eval_Section(): 
+         return render_template('./Evaluation/enter-eval-getLO.html')
+        
+
+@app.route('/enter-evaluation-LO', methods = ['POST'])
+def Eval_LO(): 
+         return render_template('./Evaluation/enter-eval-info.html')
+
+@app.route('/enter-evaluation-info', methods = ['POST'])
+def Insert_Eval(): 
+    #return submission complete
+         return render_template('./Evaluation/submit-eval.html')
+
 
 
 """CHECK FUNCTIONS:"""
