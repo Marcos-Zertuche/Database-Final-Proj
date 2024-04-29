@@ -1,14 +1,23 @@
 import mysql.connector
+import json
 
-# Function to connect to MySQL database
-def connect_db():
+def read_config(file_path):
+    with open(file_path, 'r') as f:
+        return json.load(f)
+
+def connect_db(config):
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Impulsive1@",
-        database="db_final_project"
+        host=config['host'],
+        user=config['user'],
+        password=config['password'],
+        database=config['database']
     )
 
+# # Read database configuration from file
+# config = read_config('config.json')
+
+# # Connect to the database
+# connection = connect_db(config)
 
 # Function to create tables in the database
 def create_tables():
