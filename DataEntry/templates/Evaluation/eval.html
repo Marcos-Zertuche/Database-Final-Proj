@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        select {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+        textarea {
+            width: 300px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .info {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Evaluation Entry</h2>
+    <form id="evaluationForm">
+        <label for="degree">Degree:</label><br>
+        <input type="text" id="degree" name="degree" required><br>
+        <label for="semester">Semester:</label><br>
+        <input type="text" id="semester" name="semester" required><br>
+        <label for="instructor">Instructor:</label><br>
+        <input type="text" id="instructor" name="instructor" required><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="info" id="info"></div>
+
+    <div id="sectionSelection" class="hidden">
+        <h3>Select Section:</h3>
+        <select id="sectionDropdown"></select>
+    </div>
+
+    <div id="objectiveEntry" class="hidden">
+        <h2>Evaluation Entry for Learning Objectives</h2>
+        <form id="objectiveEvaluationForm">
+            <label for="course">Course:</label><br>
+            <select id="course" name="course" required>
+                <!-- Populate this dropdown with courses from the database -->
+                <option value="course1">Course 1</option>
+                <option value="course2">Course 2</option>
+                <!-- Add more options dynamically -->
+            </select><br>
+            <label for="objective">Learning Objective:</label><br>
+            <select id="objective" name="objective" required>
+                <!-- Populate this dropdown with objectives associated with the selected course -->
+                <option value="objective1">Objective 1</option>
+                <option value="objective2">Objective 2</option>
+                <!-- Add more options dynamically -->
+            </select><br>
+            <label for="evaluationType">Evaluation Type:</label><br>
+            <input type="text" id="evaluationType" name="evaluationType" required><br>
+            <label for="Acount">Number of Students Achieving A:</label><br>
+            <input type="number" id="Acount" name="Acount" min="0" required><br>
+            <label for="Bcount">Number of Students Achieving B:</label><br>
+            <input type="number" id="Bcount" name="Bcount" min="0" required><br>
+            <label for="Ccount">Number of Students Achieving C:</label><br>
+            <input type="number" id="Ccount" name="Ccount" min="0" required><br>
+            <label for="Fcount">Number of Students Achieving F:</label><br>
+            <input type="number" id="Fcount" name="Fcount" min="0" required><br>
+            <label for="improvementSuggestion">Improvement Suggestion:</label><br>
+            <textarea id="improvementSuggestion" name="improvementSuggestion"></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('evaluationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var degree = document.getElementById('degree').value;
+            var semester = document.getElementById('semester').value;
+            var instructor = document.getElementById('instructor').value;
+
+            // Dummy example for sections taught
+            var sectionsTaught = ["Section A", "Section B", "Section C"];
+
+            var infoDiv = document.getElementById('info');
+            infoDiv.innerHTML = `
+                <p>Select a section:</p>
+            `;
+
+            // Populate the section dropdown
+            var sectionDropdown = document.getElementById('sectionDropdown');
+            sectionDropdown.innerHTML = '';
+            sectionsTaught.forEach(function(section) {
+                var option = document.createElement('option');
+                option.value = section;
+                option.textContent = section;
+                sectionDropdown.appendChild(option);
+            });
+
+            // Show the section selection div
+            document.getElementById('sectionSelection').classList.remove('hidden');
+        });
+
+        // Event listener for section selection
+        document.getElementById('sectionDropdown').addEventListener('change', function() {
+            // Show the learning objective and grades entry form
+            document.getElementById('objectiveEntry').classList.remove('hidden');
+        });
+
+        function makeChanges() {
+            // Prompt for re-input of degree, semester, instructor
+            var degree = prompt("Enter the degree:");
+            var semester = prompt("Enter the semester:");
+            var instructor = prompt("Enter the instructor:");
+
+            if (degree && semester && instructor) {
+                // Proceed with the changes
+                alert("Changes made successfully.");
+            } else {
+                // User canceled or didn't provide input
+                alert("Changes canceled.");
+            }
+        }
+
+        function noChanges() {
+            // Add logic for when no changes are needed
+            alert("You chose not to make any changes.");
+        }
+
+        function duplicateToOtherDegree() {
+            var duplicateDegree = document.getElementById('duplicateDegree').value;
+            if (duplicateDegree.trim() === "") {
+                alert("Please enter a degree to duplicate to.");
+            } else {
+                // Add logic to duplicate data to another degree
+                alert(`Data duplicated to ${duplicateDegree}.`);
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -107,7 +107,8 @@ def create_tables():
             DegreeID INT AUTO_INCREMENT,
             CourseNum VARCHAR(10),
             IsCore BOOLEAN,
-            PRIMARY KEY (DegreeID, CourseNum, IsCore),
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeID, CourseNum, IsCore,DegreeLevel),
             FOREIGN KEY (CourseNum) REFERENCES Course(CourseID)
 );
     """)
