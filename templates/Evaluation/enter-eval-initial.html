@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Information for Evaluation</title>
+</head>
+<body>
+    <h2>Evaluation Entry</h2>
+    <form action="/enter-evaluation-init" method="post">
+        <label for="degree">Degree Name:</label><br>
+        <input type="text" id="degree" name="degree" required><br>
+        <label for="levelName">Degree Level:</label><br>
+        <input type="levelName" name="levelName" required><br>
+        <label for="semester">Semester:</label><br>
+        <select id="semester" name="semester" required>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+            <option value="Fall">Fall</option>
+        </select><br>
+	<label for="year">Year:</label><br>
+        <input type="number" id="year" name="year" min="1900" max="2099" required><br>
+        <label for="instructorID">Instructor ID:</label><br>
+        <input type="number" id="instructorID" name="instructorID" required><br>
+        <input type="submit" value="Submit">
+    </div>
+</body>
+</html>

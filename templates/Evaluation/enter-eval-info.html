@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Information for Evaluation</title>
+</head>
+<body>
+    <h2>Evaluation Entry</h2>
+    <form action="/enter-evaluation-info" method="post">
+            <label for="Acount">Number of Students Achieving A:</label><br>
+            <input type="number" id="Acount" name="Acount" min="0" required><br>
+            <label for="Bcount">Number of Students Achieving B:</label><br>
+            <input type="number" id="Bcount" name="Bcount" min="0" required><br>
+            <label for="Ccount">Number of Students Achieving C:</label><br>
+            <input type="number" id="Ccount" name="Ccount" min="0" required><br>
+            <label for="Fcount">Number of Students Achieving F:</label><br>
+            <input type="number" id="Fcount" name="Fcount" min="0" required><br>
+            <label for="improvementSuggestion">Improvement Suggestion:</label><br>
+            <textarea id="improvementSuggestion" name="improvementSuggestion"></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>
