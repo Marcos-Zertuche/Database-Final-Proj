@@ -137,3 +137,45 @@ def create_tables():
 
 # Call the function to create tables when the script is executed
 create_tables()
+
+
+def Insert_Instructor(dict_info):
+
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Instructor_ID  = dict_info["instructorID"]
+    Instructor_Name  = dict_info["instructorName"]
+    cursor.execute("""INSERT INTO Instructor(InstructorID, InstructorName)
+                   ,"""(Instructor_ID, Instructor_Name))
+
+    conn.commit()
+    conn.close
+    return
+
+def Insert_Degree(dict_info):
+
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Degree_Name  = dict_info["name"]
+    DegreeLevel  = dict_info["level"]
+    cursor.execute("""INSERT INTO Degree(DegreeName, DegreeLevel)
+                   ,"""(Degree_Name, DegreeLevel))
+
+    conn.commit()
+    conn.close
+    return
+    
+
+# def Insert_Course(dict_info):
+
+
+# def Insert_Section(dict_info):
+
+
+# def Insert_Learning_Objective(dict_info):
+
+
+
+# def Insert_Level(dict_info):
