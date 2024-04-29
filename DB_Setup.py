@@ -14,7 +14,6 @@ def connect_db():
         database=config['database']
     )
 
-
 # Function to create tables in the database
 def create_tables():
     conn = connect_db()
@@ -26,20 +25,25 @@ def create_tables():
     # Creating Evaluation table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Evaluation (
-            EvaluationID VARCHAR(6) PRIMARY KEY,
-            EvalMethod VARCHAR(50),
-            ObjectiveCode VARCHAR(6),
+            EvalObjective VARCHAR(50),
             DegreeName VARCHAR(50),
             DegreeLevel VARCHAR(10),
             A INT,
             B INT,
             C INT,
-            D INT,
-            Description VARCHAR(500),
+            F INT,
+            EvaluationDescription VARCHAR(500),
             InstructorID VARCHAR(8),
             SectionID VARCHAR(3),
-            SemesterID VARCHAR(6),
-            CourseID VARCHAR(8)
+            Semester VARCHAR(6),
+            Year INT,
+            CourseID VARCHAR(8),
+            PRIMARY KEY (SectionID, CourseID, EvalObjective), 
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+            FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year) 
+            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
+            FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
+            
         )
     """)
 
@@ -49,26 +53,36 @@ def create_tables():
             DegreeName VARCHAR(50),
             DegreeLevel VARCHAR(5),
             PRIMARY KEY (DegreeName, DegreeLevel)
+            FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
         )
     """)
 
     # Creating LearningObjective table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS LearningObjective (
-            CourseID VARCHAR(8),
-            ObjectiveCode VARCHAR(6),
+            ObjectiveCode VARCHAR(6) AUTO_INCREMENT,
             ObjectiveTitle VARCHAR(120),
             Description VARCHAR(500),
-            PRIMARY KEY (CourseID, ObjectiveCode),
-            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+            PRIMARY KEY (ObjectiveCode),
+            UNIQUE (ObjectiveTitle),
+            FOREIGN KEY (ObjectiveCode) REFERENCES Course(ObjectiveCode)
+        )
+    """)
+
+    # LearningObjective - Course
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS LearningObjective (
+            ObjectiveCode VARCHAR(6),
+            CourseID VARCHAR(8)
         )
     """)
 
     # Creating Level table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Level (
-            LevelName VARCHAR(5),
-            PRIMARY KEY (LevelName)
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeLevel)
+            
         )
     """)
 
@@ -76,11 +90,12 @@ def create_tables():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Section (
             SectionID VARCHAR(3),
-            SemesterID VARCHAR(6),
+            Semester VARCHAR(6),
+            Year INT,
             CourseID VARCHAR(8),
             NumStudents INT,
             InstructorID VARCHAR(8),
-            PRIMARY KEY (SectionID, SemesterID, CourseID),
+            PRIMARY KEY (SectionID, Semester, CourseID, Year),
             FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
         )
     """)
@@ -90,8 +105,6 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS Course (
             CourseID VARCHAR(8),
             CourseName VARCHAR(50),
-            DegreeName VARCHAR(50),
-            DegreeLevel VARCHAR(5),
             PRIMARY KEY (CourseID),
             FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
         )
@@ -109,12 +122,11 @@ def create_tables():
     # Creating Degree_Course table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Degree_Course (
-            DegreeID INT AUTO_INCREMENT,
-            CourseNum VARCHAR(10),
+            CourseID VARCHAR(10),
             IsCore BOOLEAN,
             DegreeLevel VARCHAR(5),
-            PRIMARY KEY (DegreeID, CourseNum, IsCore,DegreeLevel),
-            FOREIGN KEY (CourseNum) REFERENCES Course(CourseID)
+            PRIMARY KEY (DegreeID, CourseID, IsCore,DegreeLevel),
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
 );
     """)
 
