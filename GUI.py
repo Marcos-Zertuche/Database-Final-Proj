@@ -419,19 +419,9 @@ def Evaluation_Result():
         if len(year) > 4:
             errors.append("Error: Year exceeds 4 characters limit.")
 
-        # Check if semester ID exists in the Evaluation table:
-        semester_id = ''
-        if semester == 'Spring':
-            semester_id += 'SP'
-        elif semester == 'Summer':
-            semester_id += 'SU'
-        else:
-            semester_id += 'FA'
-        semester_id += year
-        print(semester_id)
-        
-        # query = "SELECT * FROM Evaluation WHERE SemesterID = %s"
-        # cursor.execute(query, (semester_id))
+        # # Check if semester ID exists in the Evaluation table:
+        # query = "SELECT * FROM Evaluation WHERE Semester = %s AND Year = %s"
+        # cursor.execute(query, (semester, year))
 
         # # Fetch the result
         # result = cursor.fetchone()
