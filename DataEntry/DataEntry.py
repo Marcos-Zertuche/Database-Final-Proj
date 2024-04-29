@@ -23,6 +23,7 @@ def Submit_Degree():
         
         # Checks to complete 
         # Degree Name restrictions (alpha char)
+        # Combination of Degree Name and Level has to be unique
         # Degree Level has to exist in Level table
         
         return render_template('./Degree/submit-degree.html')
@@ -102,19 +103,9 @@ def Submit_Section():
         
         return render_template('./Section/submit-section.html')
 
+
 @app.route('/add-learning-objective', methods=['GET', 'POST'])
 def Add_LearnObj():
-    if request.method == 'POST':
-        
-        # For now, let's just print the submitted data
-        print(request.form)
-        
-        """Error checking, break out for adding to table"""
-        
-        
-        return "Degree information submitted successfully!"
-    else:
-        # If it's a GET request, render the form for the user to fill out
         return render_template('./Learning-Objective/add-lo-form.html')
     
 @app.route('/submit-new-learning-objective', methods=[ 'POST'])    
@@ -128,9 +119,21 @@ def Submit_LearnObj():
         # to do whatever you want with the submitted data
         return render_template('./Learning-Objective/submit-lo.html')
 
-# @app.route('/add-learning-objective', methods=['POST'])
-# def Add_LearningObjective():
-#     return render_template('add-learning-objective.html')
+@app.route('/add-level', methods=['GET', 'POST'])
+def Add_Level():
+        return render_template('./Level/add-level-form.html')
+    
+@app.route('/submit-new-level', methods=[ 'POST'])    
+def Submit_Level():
+    if request.method == 'POST':
+        print(request.form)
+        
+        # Print the form data to the console
+        
+        # You can now use the 'name' and 'email' variables
+        # to do whatever you want with the submitted data
+        return render_template('./Level/submit-level.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
