@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluation Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Evaluation Entry</h2>
+    <form id="evaluationForm">
+        <label for="degree">Degree:</label><br>
+        <input type="text" id="degree" name="degree" required><br>
+        <label for="semester">Semester:</label><br>
+        <input type="text" id="semester" name="semester" required><br>
+        <label for="instructor">Instructor:</label><br>
+        <input type="text" id="instructor" name="instructor" required><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div class="info" id="info"></div>
+
+    <script>
+        document.getElementById('evaluationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var degree = document.getElementById('degree').value;
+            var semester = document.getElementById('semester').value;
+            var instructor = document.getElementById('instructor').value;
+
+            // Dummy example
+            var sectionsTaught = ["Section A", "Section B", "Section C"];
+            var existingData = sectionsTaught.length;
+            var totalData = 3; // Assuming total sections is 3 for demo purpose
+
+            var infoDiv = document.getElementById('info');
+            infoDiv.innerHTML = `
+                <p>Sections taught by ${instructor} in ${degree} - ${semester}:</p>
+                <ul>
+                    ${sectionsTaught.map(section => `<li>${section}</li>`).join('')}
+                </ul>
+                <p>Information entered: ${existingData} out of ${totalData}</p>
+                <p>Do you want to make any changes?</p>
+                <button onclick="makeChanges()">Make Changes</button>
+                <button onclick="noChanges()">No Changes</button>
+                <br><br>
+                <label for="duplicateDegree">Duplicate to another degree:</label><br>
+                <input type="text" id="duplicateDegree" name="duplicateDegree">
+                <button onclick="duplicateToOtherDegree()">Duplicate</button>
+            `;
+        });
+
+        function makeChanges() {
+            // Prompt for re-input of degree, semester, and instructor
+            var degree = prompt("Enter the degree:");
+            var semester = prompt("Enter the semester:");
+            var instructor = prompt("Enter the instructor:");
+
+            if (degree && semester && instructor) {
+                // Proceed with the changes
+                alert("Changes made successfully.");
+            } else {
+                // User canceled or didn't provide input
+                alert("Changes canceled.");
+            }
+        }
+
+        function noChanges() {
+            // Add logic for when no changes are needed
+            alert("You chose not to make any changes.");
+        }
+
+        function duplicateToOtherDegree() {
+            var duplicateDegree = document.getElementById('duplicateDegree').value;
+            if (duplicateDegree.trim() === "") {
+                alert("Please enter a degree to duplicate to.");
+            } else {
+                // Add logic to duplicate data to another degree
+                alert(`Data duplicated to ${duplicateDegree}.`);
+            }
+        }
+    </script>
+</body>
+</html>
