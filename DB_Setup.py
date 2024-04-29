@@ -141,19 +141,19 @@ def create_tables():
 create_tables()
 
 
-# def Insert_Instructor(dict_info):
+def Insert_Instructor(dict_info):
 
-#     conn = connect_db()
-#     cursor = conn.cursor() 
+    conn = connect_db()
+    cursor = conn.cursor() 
 
-#     Instructor_ID  = dict_info["instructorID"]
-#     Instructor_Name  = dict_info["instructorName"]
-#     cursor.execute("""INSERT INTO Instructor(InstructorID, InstructorName)
-#                    ,"""(Instructor_ID, Instructor_Name))
+    Instructor_ID  = dict_info["instructorID"]
+    Instructor_Name  = dict_info["instructorName"]
+    query = """INSERT INTO Instructor(InstructorID, InstructorName) VALUES (%s, %s)"""
+    cursor.execute(query, (Instructor_ID, Instructor_Name))
 
-#     conn.commit()
-#     conn.close
-#     return
+    conn.commit()
+    conn.close
+    return
 
 # def Insert_Degree(dict_info):
 
