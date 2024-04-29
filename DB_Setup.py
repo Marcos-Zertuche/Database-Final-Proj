@@ -22,6 +22,72 @@ def create_tables():
     # Drop the sample_table if it exists
     cursor.execute("DROP TABLE IF EXISTS sample_table")
 
+    
+    
+ # Creating Level table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Level (
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeLevel)
+            
+        )
+    """)
+    # Creating Degree table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Degree (
+            DegreeName VARCHAR(50),
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeName, DegreeLevel),
+            FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
+        )
+    """)
+
+    # Creating Course table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Course (
+            CourseID VARCHAR(8),
+            CourseName VARCHAR(50),
+            PRIMARY KEY (CourseID)
+        )
+    """)
+    # Creating LearningObjective table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS LearningObjective (
+            ObjectiveCode INT AUTO_INCREMENT PRIMARY KEY,
+            ObjectiveTitle VARCHAR(120) UNIQUE,
+            Description VARCHAR(500)
+        )
+    """)
+
+    # Creating LearningObjective_Course table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS LearningObjective_Course (
+            LearningObjectiveTitle VARCHAR(120),
+            CourseID VARCHAR(8),
+            PRIMARY KEY (LearningObjectiveTitle, CourseID),
+            FOREIGN KEY (LearningObjectiveTitle) REFERENCES LearningObjective(ObjectiveTitle),
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+        )
+    """)
+
+    
+    # Creating Section table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Section (
+            SectionID VARCHAR(3),
+            Semester VARCHAR(6),
+            Year INT,
+            CourseID VARCHAR(8),
+            NumStudents INT,
+            InstructorID VARCHAR(8),
+            PRIMARY KEY (SectionID, Semester, CourseID, Year), 
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
+                    
+        )
+    """)
+
+   
+
     # Creating Evaluation table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Evaluation (
@@ -39,74 +105,11 @@ def create_tables():
             Year INT,
             CourseID VARCHAR(8),
             PRIMARY KEY (SectionID, CourseID, EvalObjective), 
-            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
-            FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year) 
-            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
+            FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+            FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year), 
+            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel),
             FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
             
-        )
-    """)
-
-    # Creating Degree table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Degree (
-            DegreeName VARCHAR(50),
-            DegreeLevel VARCHAR(5),
-            PRIMARY KEY (DegreeName, DegreeLevel)
-            FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
-        )
-    """)
-
-    # Creating LearningObjective table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS LearningObjective (
-            ObjectiveCode VARCHAR(6) AUTO_INCREMENT,
-            ObjectiveTitle VARCHAR(120),
-            Description VARCHAR(500),
-            PRIMARY KEY (ObjectiveCode),
-            UNIQUE (ObjectiveTitle),
-            FOREIGN KEY (ObjectiveCode) REFERENCES Course(ObjectiveCode)
-        )
-    """)
-
-    # LearningObjective - Course
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS LearningObjective (
-            ObjectiveCode VARCHAR(6),
-            CourseID VARCHAR(8)
-        )
-    """)
-
-    # Creating Level table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Level (
-            DegreeLevel VARCHAR(5),
-            PRIMARY KEY (DegreeLevel)
-            
-        )
-    """)
-
-    # Creating Section table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Section (
-            SectionID VARCHAR(3),
-            Semester VARCHAR(6),
-            Year INT,
-            CourseID VARCHAR(8),
-            NumStudents INT,
-            InstructorID VARCHAR(8),
-            PRIMARY KEY (SectionID, Semester, CourseID, Year),
-            FOREIGN KEY (CourseID) REFERENCES Course(CourseID)
-        )
-    """)
-
-    # Creating Course table
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Course (
-            CourseID VARCHAR(8),
-            CourseName VARCHAR(50),
-            PRIMARY KEY (CourseID),
-            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
         )
     """)
 
@@ -139,33 +142,33 @@ def create_tables():
 create_tables()
 
 
-def Insert_Instructor(dict_info):
+# def Insert_Instructor(dict_info):
 
-    conn = connect_db()
-    cursor = conn.cursor() 
+#     conn = connect_db()
+#     cursor = conn.cursor() 
 
-    Instructor_ID  = dict_info["instructorID"]
-    Instructor_Name  = dict_info["instructorName"]
-    cursor.execute("""INSERT INTO Instructor(InstructorID, InstructorName)
-                   ,"""(Instructor_ID, Instructor_Name))
+#     Instructor_ID  = dict_info["instructorID"]
+#     Instructor_Name  = dict_info["instructorName"]
+#     cursor.execute("""INSERT INTO Instructor(InstructorID, InstructorName)
+#                    ,"""(Instructor_ID, Instructor_Name))
 
-    conn.commit()
-    conn.close
-    return
+#     conn.commit()
+#     conn.close
+#     return
 
-def Insert_Degree(dict_info):
+# def Insert_Degree(dict_info):
 
-    conn = connect_db()
-    cursor = conn.cursor() 
+#     conn = connect_db()
+#     cursor = conn.cursor() 
 
-    Degree_Name  = dict_info["name"]
-    DegreeLevel  = dict_info["level"]
-    cursor.execute("""INSERT INTO Degree(DegreeName, DegreeLevel)
-                   ,"""(Degree_Name, DegreeLevel))
+#     Degree_Name  = dict_info["name"]
+#     DegreeLevel  = dict_info["level"]
+#     cursor.execute("""INSERT INTO Degree(DegreeName, DegreeLevel)
+#                    ,"""(Degree_Name, DegreeLevel))
 
-    conn.commit()
-    conn.close
-    return
+#     conn.commit()
+#     conn.close
+#     return
     
 
 # def Insert_Course(dict_info):
