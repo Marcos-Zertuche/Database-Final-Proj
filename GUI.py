@@ -131,7 +131,7 @@ def Submit_Level():
         if not levelCheck(request.form): return render_template('Error.html')
         return render_template('./Level/submit-level.html')
     
-@app.route('/enter-evaluation-init', methods=['POST'])
+@app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
         return render_template('./Evaluation/enter-eval-getsection.html')
     
