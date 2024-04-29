@@ -1,11 +1,12 @@
 import mysql.connector
 import json
 
-def read_config(file_path):
-    with open(file_path, 'r') as f:
-        return json.load(f)
-
-def connect_db(config):
+# Connect to the database
+def connect_db():
+    with open('./config.json', 'r') as f:
+        config = json.load(f)
+    f.close()
+    
     return mysql.connector.connect(
         host=config['host'],
         user=config['user'],
@@ -13,11 +14,6 @@ def connect_db(config):
         database=config['database']
     )
 
-# # Read database configuration from file
-# config = read_config('config.json')
-
-# # Connect to the database
-# connection = connect_db(config)
 
 # Function to create tables in the database
 def create_tables():
