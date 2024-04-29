@@ -22,6 +22,10 @@ def Degree_Result():
         print(request.form)
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
+        print(f"Start Semester: {request.form['startSemester']}")
+        print(f"Start Year: {request.form['startYear']}")
+        print(f"End Semester: {request.form['endSemester']}")
+        print(f"End Year: {request.form['endYear']}")
         
         # Get the form data
         degree_name = request.form['name']
@@ -72,6 +76,10 @@ def Course_Result():
         print(request.form)
         print(f"Course ID: {request.form['courseID']}")
         print(f"Course Name: {request.form['courseName']}")
+        print(f"Start Semester: {request.form['startSemester']}")
+        print(f"Start Year: {request.form['startYear']}")
+        print(f"End Semester: {request.form['endSemester']}")
+        print(f"End Year: {request.form['endYear']}")
         
         # Get the form data
         course_id = request.form['courseID']
@@ -122,6 +130,10 @@ def Instructor_Result():
         print(request.form)
         print(f"Instructor ID: {request.form['instructorID']}")
         print(f"Instructor Name: {request.form['instructorName']}")
+        print(f"Start Semester: {request.form['startSemester']}")
+        print(f"Start Year: {request.form['startYear']}")
+        print(f"End Semester: {request.form['endSemester']}")
+        print(f"End Year: {request.form['endYear']}")
         
         # Get the form data
         instructor_id = request.form['instructorID']
@@ -172,6 +184,7 @@ def Evaluation_Result():
         print(request.form)
         print(f"Semester: {request.form['semester']}")
         print(f"Year: {request.form['year']}")
+        print(f"Percentage: {request.form['percentage']}")
         
         # Get the form data
         semester = request.form['semester']
