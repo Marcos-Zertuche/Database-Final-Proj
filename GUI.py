@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, connect_db, Check_Course
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -361,22 +361,26 @@ def Course_Result():
         if len(course_name) > 50:
             errors.append("Error: Course Name exceeds 50 characters limit.")
 
-        # # Check if course ID exists in the Course table:
-        # query = "SELECT * FROM Course WHERE CourseID = %s"
-        # cursor.execute(query, (course_id))
+        # Check if course ID exists in the Course table:
+        conn = connect_db()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Course WHERE CourseID = %s"
+        cursor.execute(query, (course_id))
 
-        # # Fetch the result
-        # result = cursor.fetchone()
+        # Fetch the result
+        result = cursor.fetchone()
 
-        # conn.close()
+        conn.close()
 
-        # if result is None:
-        #     errors.append("Error: Course ID does not exist in the Course table.")
+        if result is None:
+            errors.append("Error: Course ID does not exist in the Course table.")
         
         if errors:
             for error in errors:
                 flash(error)
             return render_template('./Course/list-course.html')
+        
+        Check_Course(request.form)
 
         # If all checks pass, render the course-result.html template
         return render_template('./Course/course-result.html')

@@ -247,4 +247,14 @@ def Insert_Learning_Objective(dict_info):
     return
 
 
+def Check_Course(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    query = """SELECT * FROM Course WHERE CourseID = %s"""
+    cursor.execute(query, (Course_ID,))
+    result = cursor.fetchone()
+    conn.close()
+    return result
 
