@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval, Complete_Evaluation
 
 
 app = Flask(__name__)
@@ -139,9 +139,9 @@ EVAL_DICT = {}
 def Eval_Section(): 
         print(request.form)
         global EVAL_DICT
+        
         sections = View_Sections(request.form)
         print("SECTIONS:" , sections)
-        
         EVAL_DICT['DegreeName'] = request.form['degree']
         EVAL_DICT['DegreeLevel'] = request.form['deg_level']
         EVAL_DICT['Semester'] = request.form['semester']
@@ -186,11 +186,17 @@ def Insert_Eval():
 
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
-         print(request.form)
+        global EVAL_DICT
+        print(request.form)
+        EVAL_DICT['A'] = request.form['Acount']
+        EVAL_DICT['B'] = request.form['Bcount']
+        EVAL_DICT['C'] = request.form['Ccount']
+        EVAL_DICT['F'] = request.form['Fcount']
+        EVAL_DICT['EvaluationDescription'] = request.form['improvementSuggestion']
          
-         Insert_Evaluation(request.form)
-    #return submission complete
-         return render_template('./Evaluation/submit-evaluation.html')
+        Complete_Evaluation(EVAL_DICT)
+        #return submission complete
+        return render_template('./Evaluation/submit-evaluation.html')
 
 @app.route('/associate-lo-course' , methods=['GET', 'POST'])
 def Insert_LO_Course_Assoc():
