@@ -243,6 +243,23 @@ def Insert_Section(dict_info):
 
     return
 
+def Insert_LO_Course_Association(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    # print("*****",dict_info) ImmutableMultiDict([('objectiveTitle', 'Final Exam'), ('courseDeptCode', 'CS'), ('courseNum', '4444')])
+    
+    LearningObjectiveTitle = dict_info['objectiveTitle']
+    Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    
+    
+    
+    cursor.execute("""INSERT INTO LearningObjective_Course(LearningObjectiveTitle, CourseID) VALUES (%s, %s)""", (LearningObjectiveTitle , Course_ID))
+    conn.commit()
+    
+    conn.close
+    return
+
 def Insert_Core_Class(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
@@ -566,6 +583,9 @@ def LO_Exists(dict_info):
     conn.close
     
     return True
+
+
+
 
 def convert_semester(semester):
     if semester == 'Spring':
