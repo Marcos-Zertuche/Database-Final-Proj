@@ -22,8 +22,9 @@ def create_tables():
     # Drop the sample_table if it exists
     cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
-    
-    # Creating Level table
+#        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
+
+   # Creating Level table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Level (
             DegreeLevel VARCHAR(5),
@@ -31,16 +32,18 @@ def create_tables():
         );
     """)
 
-    # Creating Degree table
+# Creating Degree table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Degree (
             DegreeName VARCHAR(50),
             DegreeLevel VARCHAR(5),
             PRIMARY KEY (DegreeName, DegreeLevel),
             FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
+
         );
     """)
-
+    
+ 
     # Creating Course table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Course (
@@ -155,20 +158,32 @@ def Insert_Instructor(dict_info):
     conn.close
     return
 
-
 # def Insert_Degree(dict_info):
 
-#     conn = connect_db()
-#     cursor = conn.cursor() 
+    conn = connect_db()
+    cursor = conn.cursor() 
 
-#     Degree_Name  = dict_info["name"]
-#     DegreeLevel  = dict_info["level"]
-#     cursor.execute("""INSERT INTO Degree(DegreeName, DegreeLevel)
-#                    ,"""(Degree_Name, DegreeLevel))
+    Degree_Name  = dict_info["name"]
+    Degree_Level  = dict_info["level"]
 
-#     conn.commit()
-#     conn.close
-#     return
+    query = """INSERT INTO Degree(DegreeName, DegreeLevel) VALUES (%s, %s)"""
+    cursor.execute(query, (Degree_Name, Degree_Level))
+
+    conn.commit()
+    conn.close
+    return
+
+def Insert_Level(dict_info):
+    conn = connect_db() 
+    cursor = conn.cursor()
+    print(dict_info)
+    Degree_Level = dict_info["levelName"]
+    query = """INSERT INTO Level(DegreeLevel) VALUES (%s)"""
+    cursor.execute(query,(Degree_Level,))
+    
+    conn.commit()
+    conn.close
+    return
     
 
 def Insert_Course(dict_info):
