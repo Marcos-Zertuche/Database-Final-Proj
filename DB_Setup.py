@@ -388,13 +388,10 @@ def Insert_Evaluation(dict_info):
 def Get_Courses(dict_info):
      
     conn = connect_db()
-    cursor = conn.cursor() 
-
-    print(dict_info)
+    cursor = conn.cursor()
 
     Degree_Name =  dict_info["name"]
     Degree_Level = dict_info["level"]
-    print(Degree_Name)
     
     query = """
     SELECT c.CourseID, c.CourseName, 
@@ -418,6 +415,43 @@ def Get_Courses(dict_info):
         return None
     
     return courses
+
+def Get_Sections(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    print(dict_info)
+
+    Degree_Name =  dict_info["name"]
+    Degree_Level = dict_info["level"]
+    Start_Semester = dict_info["startSemester"]
+    End_Semester = dict_info["endSemester"]
+    Start_Year = dict_info["startYear"]
+    End_Year = dict_info["endYear"]
+
+    query = """
+    SELECT s.SectionID, s.SectionName, s.StartTime, s.EndTime, s.Day
+    FROM Section s
+    JOIN Course c ON s.CourseID = c.CourseID
+    JOIN Degree_Course dc ON c.CourseID = dc.CourseID
+    JOIN Degree d ON dc.DegreeID = d.DegreeID
+    WHERE d.DegreeName = %s
+      AND d.DegreeLevel = %s
+      AND s.Year >= %s AND s.Semester >= %s
+      AND s.Year <= %s AND s.Semester <= %s
+    ORDER BY s.StartTime;
+    """
+
+    cursor.execute(query, (Degree_Name, Degree_Level, Start_Semester, End_Semester, Start_Year, End_Year))
+    sections = cursor.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    if not sections:
+        return None
+
+    return sections
 
 
 def Course_Exists(dict_info):
