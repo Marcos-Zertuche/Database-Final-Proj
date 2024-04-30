@@ -718,6 +718,14 @@ def Evaluation_Result():
         # If all checks pass, render the eval-result.html template
         return render_template('./Evaluation/eval-result.html', sections=sections, percentage=percentage)
 
-
+@app.route('/list-eval-submitted' , methods =['GET', 'POST'] )
+def Eval_Completion():
+    return render_template('./Evaluation/list-eval-submitted.html')
+    
+@app.route('/eval-submitted-result' , methods =['GET', 'POST'] )
+def Eval_Sections_Results():
+    print(request.form)
+    return render_template('./Evaluation/eval-submitted-results.html')
+    
 if __name__ == '__main__':
     app.run(debug=True)
