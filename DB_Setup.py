@@ -529,3 +529,36 @@ def Check_Course(dict_info):
     conn.close()
 
     return sections
+
+def Check_Instructor(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    Instructor_ID = dict_info['instructorID']
+    Start_Semester = convert_semester(dict_info['startSemester'])
+    Start_Year = int(dict_info['startYear'])
+    End_Semester = convert_semester(dict_info['endSemester'])
+    End_Year = int(dict_info['endYear'])
+
+    # Select Sections within the specified semester range
+    query = """SELECT * FROM Section WHERE InstructorID = %s"""
+    cursor.execute(query, (Instructor_ID,))
+
+    # Fetch all rows
+    all_sections = cursor.fetchall()
+    print(all_sections)
+
+    sections = []
+    for section in all_sections:
+        # Extract semester and year from the section
+        section_semester = convert_semester(section[1])
+        section_year = int(section[2])
+
+        # Check if the section is within the specified semester range
+        if (section_year > Start_Year or (section_year == Start_Year and section_semester >= Start_Semester)) \
+                and (section_year < End_Year or (section_year == End_Year and section_semester <= End_Semester)):
+            sections.append(section)
+
+    conn.close()
+
+    return sections

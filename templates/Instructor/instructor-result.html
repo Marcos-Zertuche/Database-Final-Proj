@@ -3,10 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Completed</title>
+    <title>Instructor Result</title>
 </head>
 <body>
-    <h1>Submission to Instructor was completed</h1>
+    <h1>Instructor Result</h1>
+
+    {% if sections %}
+        <h2>Sections:</h2>
+        <ul>
+            {% for section in sections %}
+                <li>
+                    <strong>Section ID:</strong> {{ section[0] }}, 
+                    <strong>Semester:</strong> {{ section[1] }}, 
+                    <strong>Year:</strong> {{ section[2] }}, 
+                    <strong>Course ID:</strong> {{ section[3] }}, 
+                    <strong>Capacity:</strong> {{ section[4] }}, 
+                    <strong>Instructor:</strong> {{ section[5] }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No sections found for this Instructor.</p>
+    {% endif %}
+
     <button onclick="window.location.href='./query'">Go to Query</button>
 </body>
 </html>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Insert_Evaluation , LO_Exists
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, Insert_Evaluation , LO_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -395,7 +395,6 @@ def Instructor_Result():
         # Print the form data to the console
         print(request.form)
         print(f"Instructor ID: {request.form['instructorID']}")
-        print(f"Instructor Name: {request.form['instructorName']}")
         print(f"Start Semester: {request.form['startSemester']}")
         print(f"Start Year: {request.form['startYear']}")
         print(f"End Semester: {request.form['endSemester']}")
@@ -403,7 +402,6 @@ def Instructor_Result():
         
         # Get the form data
         instructor_id = request.form['instructorID']
-        instructor_name = request.form['instructorName']
 
         errors = []  # Initialize an empty list to store errors
 
@@ -411,29 +409,30 @@ def Instructor_Result():
         if len(instructor_id) > 8:
             errors.append("Error: Instructor ID exceeds 8 characters limit.")
 
-        # Check if Instructor Name conforms to restrictions (InstructorName VARCHAR(50))
-        if len(instructor_name) > 50:
-            errors.append("Error: Instructor Name exceeds 50 characters limit.")
+        # Check if instructor ID exists in the Instructor table:
+        conn = connect_db()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Instructor WHERE InstructorID = %s"
+        cursor.execute(query, (instructor_id,))
 
-        # # Check if instructor ID exists in the Instructor table:
-        # query = "SELECT * FROM Instructor WHERE InstructorID = %s"
-        # cursor.execute(query, (instructor_id))
+        # Fetch the result
+        result = cursor.fetchone()
 
-        # # Fetch the result
-        # result = cursor.fetchone()
+        conn.close()
 
-        # conn.close()
-
-        # if result is None:
-        #     errors.append("Error: Instructor ID does not exist in the Instructor table.")
+        if result is None:
+            errors.append("Error: Instructor ID does not exist in the Instructor table.")
         
         if errors:
             for error in errors:
                 flash(error)
             return render_template('./Instructor/list-instructor.html')
+        
+        sections = Check_Instructor(request.form)
+        print(sections)
 
         # If all checks pass, render the instructor-result.html template
-        return render_template('./Instructor/instructor-result.html')
+        return render_template('./Instructor/instructor-result.html', sections=sections)
     
     
 @app.route('/list-eval', methods=['GET'])
