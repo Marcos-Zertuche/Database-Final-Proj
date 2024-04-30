@@ -416,6 +416,8 @@ def Complete_Evaluation(dict_info):
 
     print(dict_info)
     if not Eval_Exists(dict_info) : return 
+    
+    if dict_info['A'] == None or dict_info['A'] == '' : return
 
     # query = f"""UPDATE Player
     #             SET Rating = {n_info[9]}
@@ -739,7 +741,11 @@ def LO_Course_Exists(dict_info):
 def Eval_Exists(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
-
+    print('EEEE _----> ',dict_info )
+    
+    
+    if not 'SectionID' in dict_info: return
+    
     section_id = dict_info['SectionID']
     course_id = dict_info['CourseID']
     eval_objective = dict_info['EvalObjective']
@@ -750,7 +756,7 @@ def Eval_Exists(dict_info):
                 AND CourseID = '{course_id}'
                 AND EvalObjective = '{eval_objective}';
             """
-
+    print(query)
     cursor.execute(query)
     result = cursor.fetchone()
 
