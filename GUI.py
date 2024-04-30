@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval, Get_All_Sections
 
 
 app = Flask(__name__)
@@ -666,6 +666,14 @@ def Evaluation_Result():
         print(f"Semester: {request.form['semester']}")
         print(f"Year: {request.form['year']}")
         print(f"Percentage: {request.form['percentage']}")
+
+        percentage = request.form['percentage']
+
+        if not percentage:
+            Get_All_Sections(request.form)
+
+
+
         
         # Get the form data
         semester = request.form['semester']
