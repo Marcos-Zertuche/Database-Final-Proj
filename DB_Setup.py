@@ -23,7 +23,7 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-   # # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+    # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -251,7 +251,7 @@ def Insert_Learning_Objective(dict_info):
 
     Objective_Title =  dict_info["objectiveTitle"]
     Description = dict_info["objectiveDescription"]
-    Course_ID = dict_info["courseID"]
+    Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
     
     
    # Insert into LearningObjective table
@@ -336,11 +336,6 @@ def Course_Exists(dict_info):
     
     Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
     
-    # print(f"Course: {Course_ID}")
-    # print(f"Course Var Type: {type(Course_ID)}")
-    
-    # CourseID VARCHAR(8),
-    # CourseName VARCHAR(50),
     query = f""" SELECT CourseID 
                 FROM Course 
                 WHERE CourseID = '{Course_ID}'

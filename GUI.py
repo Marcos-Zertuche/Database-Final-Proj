@@ -20,34 +20,17 @@ def Add_Degree():
     # If it's a GET request, render the form for the user to fill out
     return render_template('./Degree/add-degree-form.html')
 
-
 @app.route('/submit-new-degree', methods=[ 'POST'])    
 def Submit_Degree():
     if request.method == 'POST':
         print(request.form)
         
-        print(f"Degree Name: {request.form['name']}")
-        print(f"Degree Level: {request.form['level']}")
-        
-        
-        
         # Checks to complete 
         if not degreeCheck(request.form) : return render_template('./Error.html')
         
         Insert_Degree(request.form)
-        # Degree Name restrictions (alpha char)
-        # Combination of Degree Name and Level has to be unique
-        # Degree Level has to exist in Level table
-        
-        deg_info = {
-            'DegreeName' : request.form['name'] , 
-            'DegreeLevel' : request.form['level']
-        }
-        
-        # db.Insert_Degree(deg_info)
-        
+              
         return render_template('./Degree/submit-degree.html')
-    
 
 @app.route('/add-course', methods=['GET', 'POST'])
 def Add_Course():
@@ -70,16 +53,9 @@ def Add_Instructor():
 @app.route('/submit-new-instructor', methods=[ 'POST'])    
 def Submit_Instructor():
     if request.method == 'POST':
-        # print(request.form)
-        
-        # Checks:
-        # Instructor ID is numbers and does not exist
         if not instructorCheck(request.form): return render_template('Error.html')
         
         Insert_Instructor(request.form)
-        
-        # print(f"Instructor ID: {request.form['instructorID']}")
-        # print(f"Instructor Name: {request.form['instructorName']}")
         
         return render_template('./Instructor/submit-instructor.html')
     
@@ -98,15 +74,6 @@ def Submit_Section():
         
         Insert_Section(request.form)
         
-        print(f"Section ID: {request.form['sectionID']}")
-        # print(f"Course ID: {request.form['courseID']}")
-        print(f"Semester: {request.form['semester']}")
-        print(f"Year: {request.form['year']}")
-        print(f"Instructor ID: {request.form['instructorID']}")
-        print(f"Student in Class: {request.form['numStudents']}")
-
-        Insert_Section(request.form)
-        
         return render_template('./Section/submit-section.html')
 
 
@@ -118,8 +85,6 @@ def Add_LearnObj():
 def Submit_LearnObj():
     if request.method == 'POST':
         print(request.form)
-        
-        
         # Print the form data to the console
         if not learnObjCheck(request.form): return render_template('Error.html')
         
@@ -136,8 +101,6 @@ def Add_Level():
 def Submit_Level():
     if request.method == 'POST':
         print(request.form)
-
-        # Print the form data to the console
         
         if not levelCheck(request.form): return render_template('Error.html')
         
@@ -146,7 +109,6 @@ def Submit_Level():
 
 @app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
-        
         return render_template('./Evaluation/enter-eval-initial.html')
 
 
@@ -157,6 +119,7 @@ def Eval_Section():
         print(request.form)
         sections = View_(request.form)
         print(sections)
+        print(sections[0][0])
         print("hello")
         print(sections[0][1])
         return render_template('./Evaluation/enter-eval-getsection.html', sections = sections)
@@ -168,14 +131,12 @@ def Eval_LO():
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
-    
          return render_template('./Evaluation/enter-eval-info.html')
 
 
 
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
-    #return submission complete
          return render_template('./Evaluation/submit-evaluation.html')
 
 
@@ -218,10 +179,6 @@ def degreeCheck(input):
     return True
 
 def instructorCheck(input):
-    # print(f"Instructor ID: {input['instructorID']}")
-    # print(f"Instructor Name: {input['instructorName']}")
-    
-    # Check if ID is in Instructor table already
     if len(input['instructorName']) > 50:
             return False
     
@@ -255,7 +212,7 @@ def learnObjCheck(input):
     
     print(input)
     if LO_Exists(input) : return False
-    
+    print("BREAK HERE")
     if not Course_Exists(input): return False
     
     return True
