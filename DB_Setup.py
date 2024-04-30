@@ -470,7 +470,7 @@ def LO_Exists(dict_info):
     
     Objective_Title =  dict_info["objectiveTitle"]
     Description = dict_info["objectiveDescription"]
-    Course_ID = dict_info["courseID"]
+    Course_ID = dict_info["courseDeptCode"] + dict_info['courseNum']
     
 
     query = f""" SELECT *  

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Insert_Evaluation
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Insert_Evaluation , LO_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -186,13 +186,13 @@ def courseCheck(input):
     print(input)
     # Check if the input is alphabetical
     if not input['courseDeptCode'].isalpha(): return False
-    print("BREAK HERE")
+
     # Check if input is Shorter than 2 or greater than 4
     if len(input['courseDeptCode']) < 2 or len(input['courseDeptCode']) > 4: return False
-    print("BREAK HERE")
+
     # Check if Course Number is 4 digit -> range from 1000 - 9999
     if int(input['courseNum']) < 1000 or int(input['courseNum']) > 9999: return False
-    print("BREAK HERE")
+
     # Check if Course Name already exists in DB
     if Course_Exists(input): return False
     # if not sectionCheck(input): return False 
@@ -252,6 +252,12 @@ def sectionCheck(input):
     return True
     
 def learnObjCheck(input):
+    
+    print(input)
+    if LO_Exists(input) : return False
+    
+    if not Course_Exists(input): return False
+    
     return True
        
 def levelCheck(input):
