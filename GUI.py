@@ -58,7 +58,7 @@ def Add_Course():
 def Submit_Course():
     if request.method == 'POST':
         
-        if not courseCheck(request.form) or not sectionCheck(request.form): return render_template('./Error.html')
+        if not courseCheck(request.form) : return render_template('./Error.html')
         Insert_Course(request.form)
         return render_template('./Course/submit-course.html')
 
@@ -158,7 +158,6 @@ def Enter_Eval():
 def Eval_Section(): 
         return render_template('./Evaluation/enter-eval-getsection.html')
         
-
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
          return render_template('./Evaluation/enter-eval-getLO.html')
@@ -178,21 +177,19 @@ def Submit_Eval():
 """CHECK FUNCTIONS:"""
 # Return false if it does not meet criteria
 def courseCheck(input):
+    
+    print(input)
     # Check if the input is alphabetical
     if not input['courseDeptCode'].isalpha(): return False
-    
+    print("BREAK HERE")
     # Check if input is Shorter than 2 or greater than 4
     if len(input['courseDeptCode']) < 2 or len(input['courseDeptCode']) > 4: return False
-    
+    print("BREAK HERE")
     # Check if Course Number is 4 digit -> range from 1000 - 9999
     if int(input['courseNum']) < 1000 or int(input['courseNum']) > 9999: return False
-    
+    print("BREAK HERE")
     # Check if Course Name already exists in DB
-    
-    
-    
-    
-    # Check if Degree/Level Tuple Exists 
+    # if not sectionCheck(input): return False
     
     print("Checks passed!")
     return True

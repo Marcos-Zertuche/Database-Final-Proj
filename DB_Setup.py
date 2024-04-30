@@ -221,7 +221,25 @@ def Insert_Course(dict_info):
     return
 
 
-# def Insert_Section(dict_info):
+def Insert_Section(dict_info):
+    # [('sectionID', '333'), ('courseDeptCode', 'CS'), ('courseNum', '4444'), ('semester', 'Spring'), ('year', '2020'), ('instructorID', '488'), ('numStudents', '3')])
+    # Insert into Section
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Section_ID = dict_info["sectionID"]
+    Semester = dict_info["semester"]
+    Year = dict_info["year"]
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    Num_Students = dict_info["numStudents"]
+    Instructor_ID = dict_info["instructorID"]
+    
+    cursor.execute("""INSERT INTO Section(SectionID, Semester, Year, CourseID, NumStudents, InstructorID) VALUES (%s, %s, %s, %s, %s, %s)""", (Section_ID, Semester, Year, Course_ID, Num_Students, Instructor_ID))
+    conn.commit()
+    
+    conn.close
+
+    return
 
 
 def Insert_Learning_Objective(dict_info):
