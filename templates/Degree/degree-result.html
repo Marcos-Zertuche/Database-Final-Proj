@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Completed</title>
+    <title>Courses</title>
 </head>
 <body>
-    <h1>Submission to Degree was completed</h1>
-    <button onclick="window.location.href='./query'">Go to Query</button>
+    <h2>Courses</h2>
+    {% if courses %}
+        <ul>
+            {% for course in courses %}
+                <li>Course ID: {{ course[0] }}, Name: {{ course[1] }}, Type: {{ course[2] }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No courses found.</p>
+    {% endif %}
+
+    <button onclick="window.location.href='./query'">Go to Data Entry</button>
 </body>
 </html>

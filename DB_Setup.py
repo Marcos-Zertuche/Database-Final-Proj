@@ -272,8 +272,9 @@ def Get_Courses(dict_info):
 
     print(dict_info)
 
-    Degree_Name =  dict_info[""]
-    Degree_Level = dict_info[""]
+    Degree_Name =  dict_info["name"]
+    Degree_Level = dict_info["level"]
+    print(Degree_Name)
     
     query = """
     SELECT c.CourseID, c.CourseName, 
@@ -281,7 +282,7 @@ def Get_Courses(dict_info):
     FROM Course c
     JOIN Degree_Course dc ON c.CourseID = dc.CourseID
     JOIN Degree d ON d.DegreeName = dc.DegreeName AND d.DegreeLevel = dc.DegreeLevel
-    WHERE d.DegreeName = ? AND d.DegreeLevel = ?;
+    WHERE d.DegreeName = %s AND d.DegreeLevel = %s;
     """
 
     # Execute the query with the degree name as parameter
@@ -290,13 +291,13 @@ def Get_Courses(dict_info):
     # Fetch all rows
     courses = cursor.fetchall()
 
-    # Print the results
-    for course in courses:
-        print(f"Course ID: {course[0]}, Name: {course[1]}, Type: {course[2]}")
-
     conn.commit()
     conn.close
-    return
+
+    if not courses:
+        return None
+    
+    return courses
 
 
 def Course_Exists(dict_info):

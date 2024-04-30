@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -141,23 +141,15 @@ def Submit_Level():
         
         Insert_Level(request.form)
         return render_template('./Level/submit-level.html')
-    
-eval_degree_name = ""
-eval_degree_level = ""
-eval_section_selection = ""
 
 @app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
-        if request.method == 'POST':
-            eval_degree_name = request.form['degree']
-            eval_degree_level = request.form['levelName']
-
-        #List of Tuples 
-
+        
         return render_template('./Evaluation/enter-eval-initial.html')
     
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
+        print(request.form)
         return render_template('./Evaluation/enter-eval-getsection.html')
         
 @app.route('/enter-evaluation-LO', methods = ['POST'])
@@ -282,10 +274,6 @@ def Degree_Result():
         print(request.form)
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
-        print(f"Start Semester: {request.form['startSemester']}")
-        print(f"Start Year: {request.form['startYear']}")
-        print(f"End Semester: {request.form['endSemester']}")
-        print(f"End Year: {request.form['endYear']}")
         
         # Get the form data
         degree_name = request.form['name']
@@ -300,6 +288,8 @@ def Degree_Result():
         # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
         if len(degree_level) > 5:
             errors.append("Error: Degree Level exceeds 5 characters limit.")
+
+        courses = Get_Courses(request.form)
 
         # # Check if the combination exists in the Degree table:
         # query = "SELECT * FROM Degree WHERE DegreeName = %s AND DegreeLevel = %s"
@@ -319,7 +309,7 @@ def Degree_Result():
             return render_template('./Degree/list-degree.html')
 
         # If all checks pass, render the degree-result.html template
-        return render_template('./Degree/degree-result.html')
+        return render_template('./Degree/degree-result.html', courses = courses)
 
 
 @app.route('/list-course', methods=['GET'])
