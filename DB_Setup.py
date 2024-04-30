@@ -312,6 +312,37 @@ def Course_Exists(dict_info):
     return True
 
 def Section_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Section_ID = dict_info['sectionID']
+    Semester = dict_info['semester']
+    Year = dict_info['year']
+    Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
+    
+    
+    # SectionID VARCHAR(3),
+    #         Semester VARCHAR(6),
+    #         Year INT,
+    #         CourseID VARCHAR(8),
+    #         NumStudents INT,
+    #         InstructorID VARCHAR(8),
 
+    query = f""" SELECT *  
+                FROM Section 
+                WHERE SectionID = '{Section_ID}' AND
+                Semester = '{Semester}' AND
+                Year = '{Year}' AND
+                CourseID = '{Course_ID}' 
+            """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
     
     return True
