@@ -281,3 +281,37 @@ def Get_Courses(dict_info):
     conn.commit()
     conn.close
     return
+
+
+def Course_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
+    
+    # print(f"Course: {Course_ID}")
+    # print(f"Course Var Type: {type(Course_ID)}")
+    
+    # CourseID VARCHAR(8),
+    # CourseName VARCHAR(50),
+    query = f""" SELECT CourseID 
+                FROM Course 
+                WHERE CourseID = '{Course_ID}'
+            """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    
+    return True
+
+def Section_Exists(dict_info):
+
+    
+    return True

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -171,7 +171,6 @@ def Submit_Eval():
 
 
 
-
 """CHECK FUNCTIONS:"""
 # Return false if it does not meet criteria
 def courseCheck(input):
@@ -239,8 +238,12 @@ def sectionCheck(input):
     # Check numstudents greater than 0
     if not int(input['numStudents']) > 0: return False
     
+    # Check if section exists
+    if Section_Exists(input): return False
     
     # Check if Course Exists in course table
+    if not Course_Exists(input) : return False
+    
     
     
     # Do I need degree name/level?
