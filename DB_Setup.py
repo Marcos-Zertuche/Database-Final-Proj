@@ -224,8 +224,27 @@ def Insert_Course(dict_info):
 # def Insert_Section(dict_info):
 
 
-# def Insert_Learning_Objective(dict_info):
+def Insert_Learning_Objective(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Objective_Title =  dict_info["objectiveTitle"]
+    Description = dict_info["objectiveDescription"]
+    Course_ID = dict_info["courseID"]
+    
+    
+   # Insert into LearningObjective table
+    query = """INSERT INTO LearningObjective(ObjectiveTitle, Description) VALUES (%s, %s)"""
+    cursor.execute(query, (Objective_Title, Description))
+    
+    # Insert into LearningObjective_Course table
+    query = """INSERT INTO LearningObjective_Course(LearningObjectiveTitle, CourseID) VALUES (%s, %s)"""
+    cursor.execute(query, (Objective_Title, Course_ID))
+    
+    
+    conn.commit()
+    conn.close
+    return
 
 
 
-# def Insert_Level(dict_info):
