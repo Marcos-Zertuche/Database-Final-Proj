@@ -644,8 +644,8 @@ def Degree_Exists(dict_info):
 
     print(dict_info)
     
-    DegreeName = dict_info['degreeName']
-    DegreeLevel = dict_info['degreeLevel']
+    DegreeName = dict_info['name']
+    DegreeLevel = dict_info['level']
 
     query = f""" SELECT *  
                 FROM Degree 
