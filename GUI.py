@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -57,7 +57,7 @@ def Submit_Course():
     if request.method == 'POST':
         
         if not courseCheck(request.form) or not sectionCheck(request.form): return render_template('./Error.html')
-
+        Insert_Course(request.form)
         return render_template('./Course/submit-course.html')
 
 @app.route('/add-instructor', methods=['GET', 'POST'])
@@ -140,7 +140,7 @@ eval_degree_name = ""
 eval_degree_level = ""
 eval_section_selection = ""
 
-@app.route('/enter-evaluation-init', methods=['POST'])
+@app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
         if request.method == 'POST':
             eval_degree_name = request.form['degree']
