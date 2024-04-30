@@ -242,6 +242,25 @@ def Insert_Section(dict_info):
 
     return
 
+def Insert_Core_Class(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    Course_Name  = dict_info["courseName"]
+    # Insert into Degree_Course
+    Degree_Name = dict_info["degreeName"]
+    Degree_Level = dict_info["degreeLevel"]
+    Is_Core = dict_info["isCore"]
+    if Is_Core == 'yes':
+        Is_Core = 1
+    else:
+        Is_Core = 0
+    cursor.execute("""INSERT INTO Degree_Course(DegreeName, DegreeLevel, CourseID, IsCore) VALUES (%s, %s, %s, %s)""", (Degree_Name, Degree_Level, Course_ID, Is_Core))
+    conn.commit()
+    
+    conn.close
+    return
 
 def Insert_Learning_Objective(dict_info):
     conn = connect_db()
@@ -331,6 +350,10 @@ def Get_Courses(dict_info):
 def Course_Exists(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
+    
+    # dict_info = dict(dict_info1)
+    
+    print("****" , dict_info)
     
     Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
     
