@@ -407,6 +407,35 @@ def Insert_Evaluation(dict_info):
     # Optionally, you can return a success message or redirect to another page
     return "Evaluation data inserted successfully!"
 
+def Complete_Evaluation(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    print(dict_info)
+    if not Eval_Exists(dict_info) : return 
+
+    # query = f"""UPDATE Player
+    #             SET Rating = {n_info[9]}
+    #             WHERE ID = {n_info[2]}; """
+
+    query = f"""
+            UPDATE Evaluation
+            SET A = {int(dict_info['A'])} , 
+                B = {int(dict_info['B'])} ,
+                C = {int(dict_info['C'])} ,
+                F = {int(dict_info['F'])} ,
+                EvaluationDescription = '{dict_info['EvaluationDescription']}'
+            WHERE CourseID = '{dict_info['CourseID']}' AND
+                SectionID = '{dict_info['SectionID']}' AND
+                EvalObjective = '{dict_info['EvalObjective']}'
+    """
+    print(query)
+    cursor.execute(query)
+    conn.commit()  # Commit the transaction
+    conn.close()   # Close the connection
+
+    return 
+
 
 def Get_Courses(dict_info):
      
@@ -685,7 +714,7 @@ def LO_Course_Exists(dict_info):
 
     query = f""" SELECT *  
                 FROM LearningObjective_Course
-                WHERE LearningObjectiveTitle = '{LearningObjectiveTitle}' OR CourseID = '{Course_ID}'
+                WHERE LearningObjectiveTitle = '{LearningObjectiveTitle}' AND CourseID = '{Course_ID}'
             """
             
     cursor.execute(query)

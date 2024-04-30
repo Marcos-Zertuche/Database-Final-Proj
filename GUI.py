@@ -344,14 +344,16 @@ def assocCheck(input) :
     }
     # print(lo_dict)
     if not LO_Exists(lo_dict): return False
-    
+    print("BREAK HERE")
     if not Course_Exists(input): return False
-    
+    print("BREAK HERE")
     
     # LearningObjectiveTitle = input['objectiveTitle']
     # Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
     
     if LO_Course_Exists(lo_dict): return False
+    print("BREAK HERE")
+    
     return True
 
 #""" ERIC ORIGINAL CODE"""
