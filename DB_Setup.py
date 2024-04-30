@@ -262,11 +262,10 @@ def Insert_LO_Course_Association(dict_info):
 def Insert_Core_Class(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
+    print('-----',dict_info)
 
-    print(dict_info)
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
 
-    Course_ID  = dict_info['courseDeptCode'] + dict_info['courseNum']
-    Course_Name  = dict_info["courseName"]
     # Insert into Degree_Course
     Degree_Name = dict_info["degreeName"]
     Degree_Level = dict_info["degreeLevel"]
@@ -275,6 +274,7 @@ def Insert_Core_Class(dict_info):
         Is_Core = 1
     else:
         Is_Core = 0
+        
     cursor.execute("""INSERT INTO Degree_Course(DegreeName, DegreeLevel, CourseID, IsCore) VALUES (%s, %s, %s, %s)""", (Degree_Name, Degree_Level, Course_ID, Is_Core))
     conn.commit()
     

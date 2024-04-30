@@ -224,7 +224,7 @@ def Submit_Core():
     if request.method == 'POST':
         print(request.form)
         if not coreCheck(request.form): return render_template('Error.html') 
-        Insert_Core_Class(input)
+        Insert_Core_Class(request.form)
         return render_template('./Core-Course/submit-core.html')
 
 
@@ -320,7 +320,12 @@ def coreCheck(input):
     # Check if Course Exists and Degree Exists
     print("______>>>>>",input)
     if not Course_Exists(input): return False
-    if not Degree_Exists(input): return False
+    
+    deg_dict = {
+        'name' : input['degreeName'],
+        'level' : input['degreeLevel']
+    }
+    if not Degree_Exists(deg_dict): return False
     
     return True
     
