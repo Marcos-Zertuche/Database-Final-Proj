@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval
 
 
 app = Flask(__name__)
@@ -113,30 +113,74 @@ def Enter_Eval():
         return render_template('./Evaluation/enter-eval-initial.html')
 
 
-       
-    
+EVAL_DICT = {}
+
+#  CREATE TABLE IF NOT EXISTS Evaluation (
+#             EvalObjective VARCHAR(50),
+#             DegreeName VARCHAR(50),
+#             DegreeLevel VARCHAR(5),
+#             A INT,
+#             B INT,
+#             C INT,
+#             F INT,
+#             EvaluationDescription VARCHAR(500),
+#             InstructorID VARCHAR(8),
+#             SectionID VARCHAR(3),
+#             Semester VARCHAR(6),
+#             Year INT,
+#             CourseID VARCHAR(8),
+#             PRIMARY KEY (SectionID, CourseID, EvalObjective), 
+#             FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+#             FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year), 
+#             FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel),
+#             FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
+
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
         print(request.form)
+        global EVAL_DICT
         sections = View_Sections(request.form)
-        print(sections)
-        print(sections[0][0])
-        print("hello")
-        print(sections[0][1])
+        print("SECTIONS:" , sections)
+        
+        EVAL_DICT['DegreeName'] = request.form['degree']
+        EVAL_DICT['DegreeLevel'] = request.form['deg_level']
+        EVAL_DICT['Semester'] = request.form['semester']
+        EVAL_DICT['Year'] = request.form['year']
+        EVAL_DICT['InstructorID'] = request.form['instructorID']
+        print(EVAL_DICT)
         return render_template('./Evaluation/enter-eval-getsection.html', sections = sections)
 
         
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
+        global EVAL_DICT
+        print(EVAL_DICT)
         print(request.form)
+        
+        
+        # Parse out course ID and Section ID
+        parts = request.form['section'].split(',')
+        
+        EVAL_DICT['CourseID'] = parts[0]
+        EVAL_DICT['SectionID'] = parts[1]
+         
+         
+        print(EVAL_DICT)
+        
         objectivetitles= View_Objective_Title(request.form)
+        print("OBJECTIVES", objectivetitles)
         return render_template('./Evaluation/enter-eval-getLO.html', objectivetitles = objectivetitles )
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
-         print(request.form)
-    
-         return render_template('./Evaluation/enter-eval-info.html')
+        global EVAL_DICT
+        print(request.form)
+        EVAL_DICT['EvalObjective'] = request.form['objectivetitles'].split(',')[0].strip("('") 
+        print('******', EVAL_DICT)
+        
+        Insert_Incomplete_Eval(EVAL_DICT)
+        
+        return render_template('./Evaluation/enter-eval-info.html')
 
 
 

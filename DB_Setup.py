@@ -23,6 +23,7 @@ def create_tables():
 
     # Drop the sample_table if it exists
     # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+    # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -324,7 +325,7 @@ def View_Sections(dict_info):
     cursor.execute(query,{'instructorID': Instructor_ID, 'semester': Semester, 'year': Year})
     sections = cursor.fetchall()
     
-    print("here is sections + {sections}",sections)
+    # print("here is sections + {sections}",sections)
     cursor.close()
     conn.close()
     return sections
@@ -369,6 +370,25 @@ def View_Objective_Title(dict_info):
 #             FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel),
 #             FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
 #         );
+def Insert_Incomplete_Eval(dict_info):
+    # print('INSIDE OF INSERT FUNC' , dict_info)
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    # Eval_Objective = 
+    
+    query = """ INSERT INTO Evaluation(EvalObjective,DegreeName,DegreeLevel,InstructorID,SectionID,Semester,Year,CourseID ) 
+                    VALUES(%s, %s , %s ,%s,%s,%s,%s, %s)
+    """
+    print(dict_info)
+    print(query)
+    cursor.execute(query , (dict_info['EvalObjective'], dict_info['DegreeName'] , dict_info['DegreeLevel'] , dict_info['InstructorID'], dict_info['SectionID'], dict_info['Semester'] ,dict_info['Year'] ,dict_info['CourseID']) )
+
+    conn.commit()  # Commit the transaction
+    conn.close()   # Close the connection
+
+    return 
+
 def Insert_Evaluation(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
