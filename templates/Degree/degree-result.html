@@ -10,7 +10,7 @@
     {% if courses %}
         <ul>
             {% for course in courses %}
-                <li>Course ID: {{ course[0] }}, Name: {{ course[1] }}, Type: {{ course[2] }}</li>
+                <li><strong>Course ID:</strong> {{ course[0] }}, <strong>Name:</strong> {{ course[1] }}, <strong>Type:</strong> {{ course[2] }}</li>
             {% endfor %}
         </ul>
     {% else %}
