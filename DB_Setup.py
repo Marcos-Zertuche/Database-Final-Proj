@@ -249,3 +249,32 @@ def Insert_Learning_Objective(dict_info):
 
 
 
+
+
+def Get_Courses(dict_info):
+     
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    query = """
+        SELECT c.course_id, c.course_name, 
+               CASE WHEN dc.is_core THEN 'Core' ELSE 'Elective' END AS course_type
+        FROM course c
+        JOIN degree_course dc ON c.course_id = dc.course_id
+        JOIN degree d ON dc.degree_level = d.degree_level
+        WHERE d.degree_level = ?
+    """
+
+    # Execute the query with the degree name as parameter
+    cursor.execute(query, (degree_name,))
+
+    # Fetch all rows
+    courses = cursor.fetchall()
+
+    # Print the results
+    for course in courses:
+        print(f"Course ID: {course[0]}, Name: {course[1]}, Type: {course[2]}")
+
+    conn.commit()
+    conn.close
+    return
