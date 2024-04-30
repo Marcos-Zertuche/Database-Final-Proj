@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Result</title>
+</head>
+<body>
+        <h1>All Sections</h1>
+        {% if sections %}
+            <h2>Sections:</h2>
+            <ul>
+                {% for section in sections %}
+                    <li>
+                        <strong>Section ID:</strong> {{ section[0] }}, 
+                        <strong>Course ID:</strong> {{ section[1] }}, 
+                        <strong>Evaluation Objective:</strong> {{ section[2] }}, 
+                        <strong>Evaluation Description:</strong> {{ section[3] }} 
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No sections found.</p>
+        {% endif %}
+
+    <button onclick="window.location.href='./query'">Go to Query</button>
+</body>
+</html>

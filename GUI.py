@@ -725,7 +725,8 @@ def Eval_Completion():
 @app.route('/eval-submitted-result' , methods =['GET', 'POST'] )
 def Eval_Sections_Results():
     print(request.form)
-    return render_template('./Evaluation/eval-submitted-results.html')
+    sections = Get_All_Sections(request.form)
+    return render_template('./Evaluation/eval-submitted-results.html' , sections=sections)
     
 if __name__ == '__main__':
     app.run(debug=True)
