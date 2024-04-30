@@ -306,16 +306,22 @@ def View_Sections(dict_info):
     cursor = conn.cursor()
 
     Instructor_ID = dict_info["instructorID"]
+    Semester = dict_info["semester"]
+    Year = dict_info["year"]
 
     query = """
         SELECT CourseID, SectionID
         FROM section
         WHERE InstructorID = %(instructorID)s
+        AND Semester = %(semester)s
+        AND Year = %(year)s
     """
 
     print("SQL query:", query)
     print("Instructor_ID:", Instructor_ID)
-    cursor.execute(query,{'instructorID': Instructor_ID})
+    print("Semester:", Semester)
+    print("Year:", Year)
+    cursor.execute(query,{'instructorID': Instructor_ID, 'semester': Semester, 'year': Year})
     sections = cursor.fetchall()
     
     print("here is sections + {sections}",sections)
