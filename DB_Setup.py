@@ -20,7 +20,7 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-    # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+    # # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -222,19 +222,23 @@ def Insert_Course(dict_info):
 
 
 def Insert_Section(dict_info):
+    # [('sectionID', '333'), ('courseDeptCode', 'CS'), ('courseNum', '4444'), ('semester', 'Spring'), ('year', '2020'), ('instructorID', '488'), ('numStudents', '3')])
+    # Insert into Section
     conn = connect_db()
     cursor = conn.cursor() 
-
+    
     Section_ID = dict_info["sectionID"]
     Semester = dict_info["semester"]
     Year = dict_info["year"]
-    Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
     Num_Students = dict_info["numStudents"]
     Instructor_ID = dict_info["instructorID"]
+    
     cursor.execute("""INSERT INTO Section(SectionID, Semester, Year, CourseID, NumStudents, InstructorID) VALUES (%s, %s, %s, %s, %s, %s)""", (Section_ID, Semester, Year, Course_ID, Num_Students, Instructor_ID))
     conn.commit()
-
+    
     conn.close
+
     return
 
 
@@ -259,6 +263,200 @@ def Insert_Learning_Objective(dict_info):
     conn.commit()
     conn.close
     return
+
+def Get_Courses(dict_info):
+     
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    print(dict_info)
+
+    Degree_Name =  dict_info["name"]
+    Degree_Level = dict_info["level"]
+    print(Degree_Name)
+    
+    query = """
+    SELECT c.CourseID, c.CourseName, 
+    CASE WHEN dc.IsCore THEN 'Core' ELSE 'Elective' END AS course_type
+    FROM Course c
+    JOIN Degree_Course dc ON c.CourseID = dc.CourseID
+    JOIN Degree d ON d.DegreeName = dc.DegreeName AND d.DegreeLevel = dc.DegreeLevel
+    WHERE d.DegreeName = %s AND d.DegreeLevel = %s;
+    """
+
+    # Execute the query with the degree name as parameter
+    cursor.execute(query, (Degree_Name,Degree_Level))
+
+    # Fetch all rows
+    courses = cursor.fetchall()
+
+    conn.commit()
+    conn.close
+
+    if not courses:
+        return None
+    
+    return courses
+
+
+def Course_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
+    
+    # print(f"Course: {Course_ID}")
+    # print(f"Course Var Type: {type(Course_ID)}")
+    
+    # CourseID VARCHAR(8),
+    # CourseName VARCHAR(50),
+    query = f""" SELECT CourseID 
+                FROM Course 
+                WHERE CourseID = '{Course_ID}'
+            """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    
+    return True
+
+def Section_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Section_ID = dict_info['sectionID']
+    Semester = dict_info['semester']
+    Year = dict_info['year']
+    Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
+    
+    
+    # SectionID VARCHAR(3),
+    #         Semester VARCHAR(6),
+    #         Year INT,
+    #         CourseID VARCHAR(8),
+    #         NumStudents INT,
+    #         InstructorID VARCHAR(8),
+
+    query = f""" SELECT *  
+                FROM Section 
+                WHERE SectionID = '{Section_ID}' AND
+                Semester = '{Semester}' AND
+                Year = '{Year}' AND
+                CourseID = '{Course_ID}' 
+            """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def Instructor_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    
+    InstructorID = dict_info['instructorID']
+
+    query = f""" SELECT *  
+                FROM Instructor 
+                WHERE InstructorID = '{InstructorID}' 
+            """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def Degree_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    DegreeName = dict_info['name']
+    DegreeLevel = dict_info['level']
+
+    query = f""" SELECT *  
+                FROM Degree 
+                WHERE DegreeName = '{DegreeName}' 
+                AND DegreeLevel = '{DegreeLevel}'
+            """
+            
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def Level_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    DegreeLevel = dict_info['levelName']
+
+
+    query = f""" SELECT *  
+                FROM Degree 
+                WHERE DegreeLevel = '{DegreeLevel}' 
+            """
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def LO_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Objective_Title =  dict_info["objectiveTitle"]
+    Description = dict_info["objectiveDescription"]
+    Course_ID = dict_info["courseID"]
+    
+
+    query = f""" SELECT *  
+                FROM LearningObjective 
+                WHERE ObjectiveTitle = '{Objective_Title}' 
+            """
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
 
 def convert_semester(semester):
     if semester == 'Spring':

@@ -18,45 +18,6 @@
                 <label for="level">Degree Level:</label>
                 <input type="text" id="level" name="level" class="form-control" required>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="startSemester">Start Semester:</label>
-                    <select id="startSemester" name="startSemester" class="form-control">
-                        <option value="Spring">Spring</option>
-                        <option value="Summer">Summer</option>
-                        <option value="Fall">Fall</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="startYear">Start Year:</label>
-                    <select id="startYear" name="startYear" class="form-control">
-                        <!-- Add the years you want to include -->
-                        {% for y in range(2020, 2030) %}
-                            <option value="{{ y }}">{{ y }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="endSemester">End Semester:</label>
-                    <select id="endSemester" name="endSemester" class="form-control">
-                        <option value="Spring">Spring</option>
-                        <option value="Summer">Summer</option>
-                        <option value="Fall">Fall</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="endYear">End Year:</label>
-                    <select id="endYear" name="endYear" class="form-control">
-                        <!-- Add the years you want to include -->
-                        {% for y in range(2020, 2030) %}
-                            <option value="{{ y }}">{{ y }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            
             <input type="submit" value="Submit" class="btn btn-primary">
         </form>
         

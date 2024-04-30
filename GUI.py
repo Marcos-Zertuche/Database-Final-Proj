@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -29,10 +29,12 @@ def Submit_Degree():
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
         
-        Insert_Degree(request.form)
+        
         
         # Checks to complete 
         if not degreeCheck(request.form) : return render_template('./Error.html')
+        
+        Insert_Degree(request.form)
         # Degree Name restrictions (alpha char)
         # Combination of Degree Name and Level has to be unique
         # Degree Level has to exist in Level table
@@ -56,13 +58,8 @@ def Add_Course():
 def Submit_Course():
     if request.method == 'POST':
         
-        if not courseCheck(request.form) or not sectionCheck(request.form): return render_template('./Error.html')
-
-        # Print the form data to the console
-        print(request.form)
-
+        if not courseCheck(request.form) : return render_template('./Error.html')
         Insert_Course(request.form)
-
         return render_template('./Course/submit-course.html')
 
 @app.route('/add-instructor', methods=['GET', 'POST'])
@@ -99,6 +96,8 @@ def Submit_Section():
         
         if not sectionCheck(request.form): return render_template('Error.html')
         
+        Insert_Section(request.form)
+        
         print(f"Section ID: {request.form['sectionID']}")
         # print(f"Course ID: {request.form['courseID']}")
         print(f"Semester: {request.form['semester']}")
@@ -120,11 +119,13 @@ def Submit_LearnObj():
     if request.method == 'POST':
         print(request.form)
         
+        
         # Print the form data to the console
         if not learnObjCheck(request.form): return render_template('Error.html')
         
         Insert_Learning_Objective(request.form)
-
+        # You can now use the 'name' and 'email' variables
+        # to do whatever you want with the submitted data
         return render_template('./Learning-Objective/submit-lo.html')
 
 @app.route('/add-level', methods=['GET', 'POST'])
@@ -135,46 +136,38 @@ def Add_Level():
 def Submit_Level():
     if request.method == 'POST':
         print(request.form)
-        
-        Insert_Level(request.form)
+
         # Print the form data to the console
         
         if not levelCheck(request.form): return render_template('Error.html')
+        
+        Insert_Level(request.form)
         return render_template('./Level/submit-level.html')
-    
-eval_degree_name = ""
-eval_degree_level = ""
-eval_section_selection = ""
 
 @app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
         
-        if request.method == 'POST':
-            eval_degree_name = request.form['degree']
-            eval_degree_level = request.form['levelName']
-
-        #List of Tuples 
-
         return render_template('./Evaluation/enter-eval-initial.html')
     
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
-         
-        if request.method == 'POST':
-            
-
-
-         return render_template('./Evaluation/enter-eval-getsection.html')
+        print(request.form)
+        return render_template('./Evaluation/enter-eval-getsection.html')
         
-
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
+         return render_template('./Evaluation/enter-eval-getLO.html')
          return render_template('./Evaluation/enter-eval-getLO.html')
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
-    #return submission complete
+    
          return render_template('./Evaluation/enter-eval-info.html')
+
+@app.route('/submit-eval', methods = ['POST'])
+def Submit_Eval(): 
+    #return submission complete
+         return render_template('./Evaluation/submit-evaluation.html')
 
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
@@ -185,21 +178,20 @@ def Submit_Eval():
 """CHECK FUNCTIONS:"""
 # Return false if it does not meet criteria
 def courseCheck(input):
+    
+    print(input)
     # Check if the input is alphabetical
     if not input['courseDeptCode'].isalpha(): return False
-    
+    print("BREAK HERE")
     # Check if input is Shorter than 2 or greater than 4
     if len(input['courseDeptCode']) < 2 or len(input['courseDeptCode']) > 4: return False
-    
+    print("BREAK HERE")
     # Check if Course Number is 4 digit -> range from 1000 - 9999
     if int(input['courseNum']) < 1000 or int(input['courseNum']) > 9999: return False
-    
+    print("BREAK HERE")
     # Check if Course Name already exists in DB
-    
-    
-    
-    
-    # Check if Degree/Level Tuple Exists 
+    if Course_Exists(input): return False
+    # if not sectionCheck(input): return False 
     
     print("Checks passed!")
     return True
@@ -209,8 +201,14 @@ def degreeCheck(input):
 
     # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
     if len(input['level']) > 5: return False
-        
-    # Tuple Does not exist
+
+    # If level does not exist
+    level_input = { 'levelName' : input['level'] }
+    
+    if Level_Exists(level_input): return False
+    # Tuple exist
+    if Degree_Exists(input): return False
+
     
     print("Check Passed!")
     return True
@@ -224,24 +222,13 @@ def instructorCheck(input):
             return False
     
     # Check if id is valid
+    if Instructor_Exists(input): return False
+        
     
     print("Check Passed!")
     return True     
 
 def sectionCheck(input):
-    # print(input)
-    
-     # Checks
-        # Section does not already exist for that course in that semester in that year
-        # Professor exists in instructor table
-        # Course exists in course table
-        # Semester is either spring summer or fall
-        # Year is number and two or four digits depending on what we say
-        # Num students is greater than 0 
-    # Check section code
-    
-    # print(section_id)
-    
     # Checki if section is valid
     section_id = input['sectionID']
     if  len(section_id) != 3 or not section_id.isdigit(): return False
@@ -249,13 +236,14 @@ def sectionCheck(input):
     # Check numstudents greater than 0
     if not int(input['numStudents']) > 0: return False
     
+    # Check if section exists
+    if Section_Exists(input): return False
     
     # Check if Course Exists in course table
+    if not Course_Exists(input) : return False
     
-    
-    # Do I need degree name/level?
-    
-    
+    # Check if 
+    if not Instructor_Exists(input): return False
     
     return True
     
@@ -267,6 +255,8 @@ def levelCheck(input):
         return False
     
     # Check if the val already exists in table
+    if Level_Exists(input): return False
+
     
     return True
 
@@ -291,10 +281,6 @@ def Degree_Result():
         print(request.form)
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
-        print(f"Start Semester: {request.form['startSemester']}")
-        print(f"Start Year: {request.form['startYear']}")
-        print(f"End Semester: {request.form['endSemester']}")
-        print(f"End Year: {request.form['endYear']}")
         
         # Get the form data
         degree_name = request.form['name']
@@ -309,6 +295,8 @@ def Degree_Result():
         # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
         if len(degree_level) > 5:
             errors.append("Error: Degree Level exceeds 5 characters limit.")
+
+        courses = Get_Courses(request.form)
 
         # # Check if the combination exists in the Degree table:
         # query = "SELECT * FROM Degree WHERE DegreeName = %s AND DegreeLevel = %s"
@@ -328,7 +316,7 @@ def Degree_Result():
             return render_template('./Degree/list-degree.html')
 
         # If all checks pass, render the degree-result.html template
-        return render_template('./Degree/degree-result.html')
+        return render_template('./Degree/degree-result.html', courses = courses)
 
 
 @app.route('/list-course', methods=['GET'])
@@ -487,6 +475,7 @@ def Evaluation_Result():
 
         # If all checks pass, render the eval-result.html template
         return render_template('./Evaluation/eval-result.html')
+
 
 
 
