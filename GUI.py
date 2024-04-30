@@ -29,10 +29,12 @@ def Submit_Degree():
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
         
-        Insert_Degree(request.form)
+        
         
         # Checks to complete 
         if not degreeCheck(request.form) : return render_template('./Error.html')
+        
+        Insert_Degree(request.form)
         # Degree Name restrictions (alpha char)
         # Combination of Degree Name and Level has to be unique
         # Degree Level has to exist in Level table
@@ -113,9 +115,11 @@ def Submit_LearnObj():
     if request.method == 'POST':
         print(request.form)
         
-        Insert_Learning_Objective(request.form)
+        
         # Print the form data to the console
         if not learnObjCheck(request.form): return render_template('Error.html')
+        
+        Insert_Learning_Objective(request.form)
         # You can now use the 'name' and 'email' variables
         # to do whatever you want with the submitted data
         return render_template('./Learning-Objective/submit-lo.html')
@@ -128,12 +132,12 @@ def Add_Level():
 def Submit_Level():
     if request.method == 'POST':
         print(request.form)
-        
-         
-        Insert_Level(request.form)
+
         # Print the form data to the console
         
         if not levelCheck(request.form): return render_template('Error.html')
+        
+        Insert_Level(request.form)
         return render_template('./Level/submit-level.html')
     
 eval_degree_name = ""
@@ -490,6 +494,7 @@ def Evaluation_Result():
 
         # If all checks pass, render the eval-result.html template
         return render_template('./Evaluation/eval-result.html')
+
 
 
 
