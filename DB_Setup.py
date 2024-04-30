@@ -441,11 +441,11 @@ def LO_Exists(dict_info):
     Objective_Title =  dict_info["objectiveTitle"]
     Description = dict_info["objectiveDescription"]
     Course_ID = dict_info["courseID"]
-
+    
 
     query = f""" SELECT *  
-                FROM Degree 
-                WHERE DegreeLevel = '{DegreeLevel}' 
+                FROM LearningObjective 
+                WHERE ObjectiveTitle = '{Objective_Title}' 
             """
             
     cursor.execute(query)
