@@ -171,10 +171,7 @@ def Insert_Eval():
     
          return render_template('./Evaluation/enter-eval-info.html')
 
-@app.route('/submit-eval', methods = ['POST'])
-def Submit_Eval(): 
-    #return submission complete
-         return render_template('./Evaluation/submit-evaluation.html')
+
 
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
