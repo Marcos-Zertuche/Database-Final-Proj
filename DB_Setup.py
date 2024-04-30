@@ -21,9 +21,6 @@ def create_tables():
     conn = connect_db()
     cursor = conn.cursor()
 
-    # Drop the sample_table if it exists
-    cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
-
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
    # Creating Level table
@@ -394,6 +391,10 @@ def Complete_Evaluation(dict_info):
     
     print(dict_info)
     if not Eval_Exists(dict_info) : return 
+
+    for key, value in dict_info.items():
+        if value == '':
+            dict_info[key] = -1
     
     # query = f"""UPDATE Player
     #             SET Rating = {n_info[9]}
@@ -571,42 +572,6 @@ def Section_Exists(dict_info):
     conn.close
     
     return True
-
-def Get_All_Sections(dict_info):
-    semester = dict_info['semester']
-    year = dict_info['year']
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    query = """
-        SELECT 
-            e.SectionID,
-            e.CourseID,
-            CASE 
-                WHEN e.EvalObjective IS NOT NULL THEN 
-                    CASE 
-                        WHEN e.A IS NOT NULL OR e.B IS NOT NULL OR e.C IS NOT NULL OR e.F IS NOT NULL THEN 'Entered'
-                        ELSE 'Partially Entered'
-                    END
-                ELSE 'Not Entered'
-            END AS EvaluationStatus,
-            CASE 
-                WHEN e.EvaluationDescription IS NOT NULL AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
-                ELSE 'Not Entered'
-            END AS ImprovementStatus
-        FROM 
-            Evaluation e
-        WHERE 
-            e.Semester = %s AND e.Year = %s;
-    """
-
-    cursor.execute(query, (semester, year))
-    sections_info = cursor.fetchall()
-
-    conn.close()
-
-    return sections_info
 
 
 def Instructor_Exists(dict_info):
@@ -902,7 +867,7 @@ def Get_Section_Percentage(dict_info):
 
     Semester = dict_info['semester']
     Year = dict_info['year']
-    Percentage = dict_info['percentage']
+    Percentage = float(dict_info['percentage'])
 
     query = """SELECT SectionID, A, B, C, F, CourseID FROM Evaluation WHERE Semester = %s AND Year = %s"""
     cursor.execute(query, (Semester, Year))
@@ -920,3 +885,43 @@ def Get_Section_Percentage(dict_info):
             sections.append(section)
 
     return sections
+
+
+def Get_All_Sections(dict_info):
+    semester = dict_info['semester']
+    year = dict_info['year']
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT 
+            e.SectionID,
+            e.CourseID,
+            CASE 
+                WHEN e.EvalObjective <> -1 THEN 
+                    CASE 
+                        WHEN (e.A <> -1 AND e.B <> -1 AND e.C <> -1 AND e.F <> -1) THEN 'Entered'
+                        WHEN (e.A <> -1 OR e.B <> -1 OR e.C <> -1 OR e.F <> -1) THEN 'Partially Entered'
+                        ELSE 'Not Entered'
+                    END
+                ELSE 'Not Entered'
+            END AS EvaluationStatus,
+            CASE 
+                WHEN e.EvaluationDescription <> -1 AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
+                ELSE 'Not Entered'
+            END AS ImprovementStatus
+        FROM 
+            Evaluation e
+        WHERE 
+            e.Semester = %s AND e.Year = %s;
+
+    """
+
+    cursor.execute(query, (semester, year))
+    sections_info = cursor.fetchall()
+    print(sections_info)
+
+    conn.close()
+
+    return sections_info

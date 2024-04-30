@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval, Get_Section_Percentage, Get_All_Sections, Get_Sections
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval, Get_Section_Percentage, Get_All_Sections, Get_Sections, Complete_Evaluation
 
 
 app = Flask(__name__)
@@ -592,17 +592,13 @@ def Section_Result():
         # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
         if len(degree_level) > 5:
             errors.append("Error: Degree Level exceeds 5 characters limit.")
-
-        
-
-        if result is None:
-            errors.append("Error: Course ID does not exist in the Course table.")
         
         if errors:
             for error in errors:
                 flash(error)
             return render_template('./Degree/section-result.html')
         
+        sections = Get_Sections(request.form)
         print(sections)
 
         # If all checks pass, render the course-result.html template
@@ -676,14 +672,6 @@ def Evaluation_Result():
         print(f"Semester: {request.form['semester']}")
         print(f"Year: {request.form['year']}")
         print(f"Percentage: {request.form['percentage']}")
-
-        percentage = request.form['percentage']
-
-        if not percentage:
-            Get_All_Sections(request.form)
-
-
-
         
         # Get the form data
         semester = request.form['semester']
@@ -693,8 +681,8 @@ def Evaluation_Result():
         errors = []  # Initialize an empty list to store errors
 
         # Check if Semester conforms to restrictions (Spring, Summer, Fall)
-        if semester not in ['Spring', 'Summer', 'Fall']:
-            errors.append("Error: Semester must be Spring, Summer, or Fall.")
+        # if semester not in ['Spring', 'Summer', 'Fall']:
+        #     errors.append("Error: Semester must be Spring, Summer, or Fall.")
 
         # Check if Year conforms to restrictions (4 characters)
         if len(year) > 4:
@@ -719,7 +707,11 @@ def Evaluation_Result():
                 flash(error)
             return render_template('./Evaluation/list-eval.html')
         
-        sections = Get_Section_Percentage(request.form)
+
+        if not percentage:
+            sections = Get_All_Sections(request.form)
+        else:
+            sections = Get_Section_Percentage(request.form)
 
         # If all checks pass, render the eval-result.html template
         return render_template('./Evaluation/eval-result.html', sections=sections, percentage=percentage)
