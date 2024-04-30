@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -95,6 +95,8 @@ def Submit_Section():
         print(request.form)
         
         if not sectionCheck(request.form): return render_template('Error.html')
+        
+        Insert_Section(request.form)
         
         print(f"Section ID: {request.form['sectionID']}")
         # print(f"Course ID: {request.form['courseID']}")
@@ -200,9 +202,14 @@ def degreeCheck(input):
 
     # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
     if len(input['level']) > 5: return False
-        
-    # Tuple Does not exist
+
+    # If level does not exist
+    level_input = { 'levelName' : input['level'] }
+    
+    if Level_Exists(level_input): return False
+    # Tuple exist
     if Degree_Exists(input): return False
+
     
     print("Check Passed!")
     return True
@@ -223,19 +230,6 @@ def instructorCheck(input):
     return True     
 
 def sectionCheck(input):
-    # print(input)
-    
-     # Checks
-        # Section does not already exist for that course in that semester in that year
-        # Professor exists in instructor table
-        # Course exists in course table
-        # Semester is either spring summer or fall
-        # Year is number and two or four digits depending on what we say
-        # Num students is greater than 0 
-    # Check section code
-    
-    # print(section_id)
-    
     # Checki if section is valid
     section_id = input['sectionID']
     if  len(section_id) != 3 or not section_id.isdigit(): return False
@@ -247,7 +241,10 @@ def sectionCheck(input):
     if Section_Exists(input): return False
     
     # Check if Course Exists in course table
-    if Course_Exists(input) : return False
+    if not Course_Exists(input) : return False
+    
+    # Check if 
+    if not Instructor_Exists(input): return False
     
     return True
     
