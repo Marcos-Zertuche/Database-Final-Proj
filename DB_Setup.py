@@ -826,3 +826,28 @@ def Get_Objective_Course(dict_info):
     conn.close
     
     return objectives
+
+def Get_Section_Percentage(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    Semester = dict_info['semester']
+    Year = dict_info['year']
+    Percentage = dict_info['percentage']
+
+    query = """SELECT SectionID, A, B, C, F, CourseID FROM Evaluation WHERE Semester = %s AND Year = %s"""
+    cursor.execute(query, (Semester, Year))
+    selected_sections = cursor.fetchall()
+    print(selected_sections)
+
+    sections = []
+    for section in selected_sections:
+        total_students = section[1] + section[2] + section[3] + section[4]
+        passing_percentage = ((section[1] + section[2] + section[3]) / total_students) * 100
+        if passing_percentage >= Percentage:
+            query = """SELECT * FROM Section WHERE SectionID = %s AND Semester = %s AND Year = %s AND CourseID = %s"""
+            cursor.execute(query, (section[0], Semester, Year, section[5]))
+            section = cursor.fetchone()
+            sections.append(section)
+
+    return sections

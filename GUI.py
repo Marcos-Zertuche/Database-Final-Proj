@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections, Insert_Incomplete_Eval, Get_Section_Percentage
 
 
 app = Flask(__name__)
@@ -670,6 +670,7 @@ def Evaluation_Result():
         # Get the form data
         semester = request.form['semester']
         year = request.form['year']
+        percentage = request.form['percentage']
 
         errors = []  # Initialize an empty list to store errors
 
@@ -681,27 +682,29 @@ def Evaluation_Result():
         if len(year) > 4:
             errors.append("Error: Year exceeds 4 characters limit.")
 
-        # # Check if semester ID exists in the Evaluation table:
-        # query = "SELECT * FROM Evaluation WHERE Semester = %s AND Year = %s"
-        # cursor.execute(query, (semester, year))
+        # Check if semester plus year exists in the Evaluation table:
+        conn = connect_db()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Evaluation WHERE Semester = %s AND Year = %s"
+        cursor.execute(query, (semester, year))
 
-        # # Fetch the result
-        # result = cursor.fetchone()
+        # Fetch the result
+        result = cursor.fetchone()
 
-        # conn.close()
+        conn.close()
 
-        # if result is None:
-        #     errors.append("Error: Semester ID does not exist in the Evaluation table.")
+        if result is None:
+            errors.append("Error: Semester, Year combination does not exist in the Evaluation table.")
         
         if errors:
             for error in errors:
                 flash(error)
             return render_template('./Evaluation/list-eval.html')
+        
+        sections = Get_Section_Percentage(request.form)
 
         # If all checks pass, render the eval-result.html template
-        return render_template('./Evaluation/eval-result.html')
-
-
+        return render_template('./Evaluation/eval-result.html', sections=sections, percentage=percentage)
 
 
 if __name__ == '__main__':
