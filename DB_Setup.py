@@ -644,6 +644,30 @@ def LO_Course_Exists(dict_info):
     
     return True
 
+def Eval_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    section_id = dict_info['SectionID']
+    course_id = dict_info['CourseID']
+    eval_objective = dict_info['EvalObjective']
+
+    query = f"""SELECT COUNT(*) AS EvaluationExists
+                FROM Evaluation
+                WHERE SectionID = '{section_id}' 
+                AND CourseID = '{course_id}'
+                AND EvalObjective = '{eval_objective}';
+            """
+
+    cursor.execute(query)
+    result = cursor.fetchone()
+
+    evaluation_exists = result[0] == 1  # Check if count is 1
+
+    return evaluation_exists
+
+
+    #if evaluation exists based of primary key
 
 def convert_semester(semester):
     if semester == 'Spring':
