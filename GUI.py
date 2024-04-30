@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, Insert_Evaluation , LO_Exists
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor , LO_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -139,6 +139,18 @@ def Insert_Eval():
 def Submit_Eval(): 
          return render_template('./Evaluation/submit-evaluation.html')
 
+@app.route('/associate-lo-course' , methods=['GET', 'POST'])
+def Insert_LO_Course_Assoc():
+    return render_template('./LO-Course/assoc-lo-course.html')
+
+@app.route('/submit-lo-course-association' , methods=['GET', 'POST'])
+def Submit_Assoc():
+    if request.method == 'POST':
+        print(request.form)
+        if not assocCheck(request.form) : return render_template('Error.html')
+        return render_template('./LO-Course/submit-assoc.html')
+
+
 
 """CHECK FUNCTIONS:"""
 # Return false if it does not meet criteria
@@ -212,7 +224,7 @@ def learnObjCheck(input):
     
     print(input)
     if LO_Exists(input) : return False
-    print("BREAK HERE")
+
     if not Course_Exists(input): return False
     
     return True
@@ -224,6 +236,27 @@ def levelCheck(input):
     # Check if the val already exists in table
     if Level_Exists(input): return False
 
+    
+    return True
+
+def assocCheck(input) : 
+    #Check if Objective and CourseExists
+    print(input)
+    
+    # Objective_Title =  dict_info["objectiveTitle"]
+    # Description = dict_info["objectiveDescription"]
+    # Course_ID = dict_info["courseDeptCode"] + dict_info['courseNum']
+    
+    lo_dict = {
+        'objectiveTitle' : input['objectiveTitle'],
+        'objectiveDescription' : '', 
+        'courseDeptCode' : input["courseDeptCode"],
+        'courseNum' : input["courseNum"]
+    }
+    # print(lo_dict)
+    if not LO_Exists(lo_dict): return False
+    
+    if not Course_Exists(input): return False
     
     return True
 

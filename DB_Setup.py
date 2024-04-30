@@ -191,7 +191,6 @@ def Insert_Level(dict_info):
     
 
 def Insert_Course(dict_info):
-    
     conn = connect_db()
     cursor = conn.cursor() 
 
