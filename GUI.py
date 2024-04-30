@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -28,6 +28,8 @@ def Submit_Degree():
         
         print(f"Degree Name: {request.form['name']}")
         print(f"Degree Level: {request.form['level']}")
+        
+        Insert_Degree(request.form)
         
         # Checks to complete 
         if not degreeCheck(request.form) : return render_template('./Error.html')
@@ -126,6 +128,7 @@ def Submit_Level():
     if request.method == 'POST':
         print(request.form)
         
+        Insert_Level(request.form)
         # Print the form data to the console
         
         if not levelCheck(request.form): return render_template('Error.html')
