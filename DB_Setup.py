@@ -263,7 +263,9 @@ def Insert_Core_Class(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
 
-    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    print(dict_info)
+
+    Course_ID  = dict_info['courseDeptCode'] + dict_info['courseNum']
     Course_Name  = dict_info["courseName"]
     # Insert into Degree_Course
     Degree_Name = dict_info["degreeName"]
@@ -639,9 +641,11 @@ def Instructor_Exists(dict_info):
 def Degree_Exists(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
+
+    print(dict_info)
     
-    DegreeName = dict_info['name']
-    DegreeLevel = dict_info['level']
+    DegreeName = dict_info['degreeName']
+    DegreeLevel = dict_info['degreeLevel']
 
     query = f""" SELECT *  
                 FROM Degree 
@@ -690,7 +694,7 @@ def LO_Exists(dict_info):
     
     Objective_Title =  dict_info["objectiveTitle"]
     Description = dict_info["objectiveDescription"]
-    Course_ID = dict_info["courseDeptCode"] + dict_info['courseNum']
+    Course_ID = dict_info['courseDeptCode'] + dict_info['courseNum']
     
 
     query = f""" SELECT *  
@@ -911,7 +915,7 @@ def Get_Section_Percentage(dict_info):
 
     Semester = dict_info['semester']
     Year = dict_info['year']
-    Percentage = dict_info['percentage']
+    Percentage = float(dict_info['percentage'])
 
     query = """SELECT SectionID, A, B, C, F, CourseID FROM Evaluation WHERE Semester = %s AND Year = %s"""
     cursor.execute(query, (Semester, Year))
