@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -142,7 +142,7 @@ def Insert_Eval():
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
          print(request.form)
-
+         
          Insert_Evaluation(request.form)
     #return submission complete
          return render_template('./Evaluation/submit-evaluation.html')
@@ -279,6 +279,7 @@ def assocCheck(input) :
     #Check if Objective and CourseExists
     print(input)
     
+    
     # Objective_Title =  dict_info["objectiveTitle"]
     # Description = dict_info["objectiveDescription"]
     # Course_ID = dict_info["courseDeptCode"] + dict_info['courseNum']
@@ -294,6 +295,11 @@ def assocCheck(input) :
     
     if not Course_Exists(input): return False
     
+    
+    # LearningObjectiveTitle = input['objectiveTitle']
+    # Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    
+    if LO_Course_Exists(lo_dict): return False
     return True
 
 #""" ERIC ORIGINAL CODE"""
