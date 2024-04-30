@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages

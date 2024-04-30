@@ -62,7 +62,8 @@ def create_tables():
             IsCore BOOLEAN,
             PRIMARY KEY (DegreeName, DegreeLevel, CourseID, IsCore),
             FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
-            FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel)
+            FOREIGN KEY (DegreeName) REFERENCES Degree(DegreeName),
+            FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
         );
     """)
 
@@ -158,7 +159,7 @@ def Insert_Instructor(dict_info):
     conn.close
     return
 
-# def Insert_Degree(dict_info):
+def Insert_Degree(dict_info):
 
     conn = connect_db()
     cursor = conn.cursor() 
@@ -188,36 +189,36 @@ def Insert_Level(dict_info):
 
 def Insert_Course(dict_info):
     
-        conn = connect_db()
-        cursor = conn.cursor() 
-    
-        Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
-        Course_Name  = dict_info["courseName"]
-        cursor.execute("""INSERT INTO Course(CourseID, CourseName) VALUES (%s, %s)""", (Course_ID, Course_Name))    
-        conn.commit()
+    conn = connect_db()
+    cursor = conn.cursor() 
 
-        # Insert into Degree_Course
-        Degree_Name = dict_info["degreeName"]
-        Degree_Level = dict_info["degreeLevel"]
-        Is_Core = dict_info["isCore"]
-        if Is_Core == 'yes':
-            Is_Core = 1
-        else:
-            Is_Core = 0
-        cursor.execute("""INSERT INTO Degree_Course(DegreeName, DegreeLevel, CourseID, IsCore) VALUES (%s, %s, %s, %s)""", (Degree_Name, Degree_Level, Course_ID, Is_Core))
-        conn.commit()
+    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    Course_Name  = dict_info["courseName"]
+    cursor.execute("""INSERT INTO Course(CourseID, CourseName) VALUES (%s, %s)""", (Course_ID, Course_Name))    
+    conn.commit()
 
-        # Insert into Section
-        Section_ID = dict_info["sectionID"]
-        Semester = dict_info["semester"]
-        Year = dict_info["year"]
-        Num_Students = dict_info["numStudents"]
-        Instructor_ID = dict_info["instructorID"]
-        cursor.execute("""INSERT INTO Section(SectionID, Semester, Year, CourseID, NumStudents, InstructorID) VALUES (%s, %s, %s, %s, %s, %s)""", (Section_ID, Semester, Year, Course_ID, Num_Students, Instructor_ID))
-        conn.commit()
+    # Insert into Degree_Course
+    Degree_Name = dict_info["degreeName"]
+    Degree_Level = dict_info["degreeLevel"]
+    Is_Core = dict_info["isCore"]
+    if Is_Core == 'yes':
+        Is_Core = 1
+    else:
+        Is_Core = 0
+    cursor.execute("""INSERT INTO Degree_Course(DegreeName, DegreeLevel, CourseID, IsCore) VALUES (%s, %s, %s, %s)""", (Degree_Name, Degree_Level, Course_ID, Is_Core))
+    conn.commit()
 
-        conn.close
-        return
+    # Insert into Section
+    Section_ID = dict_info["sectionID"]
+    Semester = dict_info["semester"]
+    Year = dict_info["year"]
+    Num_Students = dict_info["numStudents"]
+    Instructor_ID = dict_info["instructorID"]
+    cursor.execute("""INSERT INTO Section(SectionID, Semester, Year, CourseID, NumStudents, InstructorID) VALUES (%s, %s, %s, %s, %s, %s)""", (Section_ID, Semester, Year, Course_ID, Num_Students, Instructor_ID))
+    conn.commit()
+
+    conn.close
+    return
 
 
 # def Insert_Section(dict_info):
