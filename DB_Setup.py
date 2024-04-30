@@ -374,7 +374,7 @@ def Insert_Incomplete_Eval(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
     
-    # Eval_Objective = 
+    if Eval_Exists(dict_info) : return 
     
     query = """ INSERT INTO Evaluation(EvalObjective,DegreeName,DegreeLevel,InstructorID,SectionID,Semester,Year,CourseID ) 
                     VALUES(%s, %s , %s ,%s,%s,%s,%s, %s)
@@ -388,6 +388,39 @@ def Insert_Incomplete_Eval(dict_info):
 
     return 
 
+def Complete_Evaluation(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    print(dict_info)
+    if not Eval_Exists(dict_info) : return 
+    
+    # query = f"""UPDATE Player
+    #             SET Rating = {n_info[9]}
+    #             WHERE ID = {n_info[2]}; """
+    
+    query = f"""
+            UPDATE Evaluation
+            SET A = {int(dict_info['A'])} , 
+                B = {int(dict_info['B'])} ,
+                C = {int(dict_info['C'])} ,
+                F = {int(dict_info['F'])} ,
+                EvaluationDescription = '{dict_info['EvaluationDescription']}'
+            WHERE CourseID = '{dict_info['CourseID']}' AND
+                SectionID = '{dict_info['SectionID']}' AND
+                EvalObjective = '{dict_info['EvalObjective']}'
+    """
+    print(query)
+    cursor.execute(query)
+    conn.commit()  # Commit the transaction
+    conn.close()   # Close the connection
+    
+    return 
+    
+    
+    
+    
+    
 def Insert_Evaluation(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
