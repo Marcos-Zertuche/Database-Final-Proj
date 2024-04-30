@@ -255,6 +255,9 @@ def Get_Courses(dict_info):
      
     conn = connect_db()
     cursor = conn.cursor() 
+
+    Degree_Name =  dict_info[""]
+    Degree_Level = dict_info[""]
     
     query = """
         SELECT c.course_id, c.course_name, 
@@ -266,7 +269,7 @@ def Get_Courses(dict_info):
     """
 
     # Execute the query with the degree name as parameter
-    cursor.execute(query, (degree_name,))
+    cursor.execute(query, (Degree_Name,Degree_Level))
 
     # Fetch all rows
     courses = cursor.fetchall()
