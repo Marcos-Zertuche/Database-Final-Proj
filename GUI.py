@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, connect_db, Check_Course
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -105,6 +105,8 @@ def Submit_Section():
         print(f"Year: {request.form['year']}")
         print(f"Instructor ID: {request.form['instructorID']}")
         print(f"Student in Class: {request.form['numStudents']}")
+
+        Insert_Section(request.form)
         
         return render_template('./Section/submit-section.html')
 
@@ -120,8 +122,9 @@ def Submit_LearnObj():
         
         # Print the form data to the console
         if not learnObjCheck(request.form): return render_template('Error.html')
-        # You can now use the 'name' and 'email' variables
-        # to do whatever you want with the submitted data
+        
+        Insert_Learning_Objective(request.form)
+
         return render_template('./Learning-Objective/submit-lo.html')
 
 @app.route('/add-level', methods=['GET', 'POST'])
@@ -341,7 +344,6 @@ def Course_Result():
         # Print the form data to the console
         print(request.form)
         print(f"Course ID: {request.form['courseID']}")
-        print(f"Course Name: {request.form['courseName']}")
         print(f"Start Semester: {request.form['startSemester']}")
         print(f"Start Year: {request.form['startYear']}")
         print(f"End Semester: {request.form['endSemester']}")
@@ -349,7 +351,6 @@ def Course_Result():
         
         # Get the form data
         course_id = request.form['courseID']
-        course_name = request.form['courseName']
 
         errors = []  # Initialize an empty list to store errors
 
@@ -357,15 +358,11 @@ def Course_Result():
         if len(course_id) > 8:
             errors.append("Error: Course ID exceeds 8 characters limit.")
 
-        # Check if Course Name conforms to restrictions (CourseName VARCHAR(50))
-        if len(course_name) > 50:
-            errors.append("Error: Course Name exceeds 50 characters limit.")
-
         # Check if course ID exists in the Course table:
         conn = connect_db()
         cursor = conn.cursor()
-        query = "SELECT * FROM Course WHERE CourseID = %s"
-        cursor.execute(query, (course_id))
+        query = """SELECT * FROM Course WHERE CourseID = %s"""
+        cursor.execute(query, (course_id,))
 
         # Fetch the result
         result = cursor.fetchone()
@@ -380,10 +377,11 @@ def Course_Result():
                 flash(error)
             return render_template('./Course/list-course.html')
         
-        Check_Course(request.form)
+        sections = Check_Course(request.form)
+        print(sections)
 
         # If all checks pass, render the course-result.html template
-        return render_template('./Course/course-result.html')
+        return render_template('./Course/course-result.html', sections=sections)
 
 
 @app.route('/list-instructor', methods=['GET'])

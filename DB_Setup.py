@@ -20,7 +20,7 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-    cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+    # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -221,7 +221,21 @@ def Insert_Course(dict_info):
     return
 
 
-# def Insert_Section(dict_info):
+def Insert_Section(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+
+    Section_ID = dict_info["sectionID"]
+    Semester = dict_info["semester"]
+    Year = dict_info["year"]
+    Course_ID = dict_info["courseDeptCode"] + dict_info["courseNum"]
+    Num_Students = dict_info["numStudents"]
+    Instructor_ID = dict_info["instructorID"]
+    cursor.execute("""INSERT INTO Section(SectionID, Semester, Year, CourseID, NumStudents, InstructorID) VALUES (%s, %s, %s, %s, %s, %s)""", (Section_ID, Semester, Year, Course_ID, Num_Students, Instructor_ID))
+    conn.commit()
+
+    conn.close
+    return
 
 
 def Insert_Learning_Objective(dict_info):
@@ -246,15 +260,43 @@ def Insert_Learning_Objective(dict_info):
     conn.close
     return
 
+def convert_semester(semester):
+    if semester == 'Spring':
+        return 0
+    elif semester == 'Summer':
+        return 1
+    else:
+        return 2
 
 def Check_Course(dict_info):
     conn = connect_db()
-    cursor = conn.cursor() 
+    cursor = conn.cursor()
 
-    Course_ID  = dict_info["courseDeptCode"] + dict_info["courseNum"]
-    query = """SELECT * FROM Course WHERE CourseID = %s"""
+    Course_ID = dict_info['courseID']
+    Start_Semester = convert_semester(dict_info['startSemester'])
+    Start_Year = int(dict_info['startYear'])
+    End_Semester = convert_semester(dict_info['endSemester'])
+    End_Year = int(dict_info['endYear'])
+
+    # Select Sections within the specified semester range
+    query = """SELECT * FROM Section WHERE CourseID = %s"""
     cursor.execute(query, (Course_ID,))
-    result = cursor.fetchone()
-    conn.close()
-    return result
 
+    # Fetch all rows
+    all_sections = cursor.fetchall()
+    print(all_sections)
+
+    sections = []
+    for section in all_sections:
+        # Extract semester and year from the section
+        section_semester = convert_semester(section[1])
+        section_year = int(section[2])
+
+        # Check if the section is within the specified semester range
+        if (section_year > Start_Year or (section_year == Start_Year and section_semester >= Start_Semester)) \
+                and (section_year < End_Year or (section_year == End_Year and section_semester <= End_Semester)):
+            sections.append(section)
+
+    conn.close()
+
+    return sections
