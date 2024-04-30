@@ -139,24 +139,44 @@ def Submit_Level():
         if not levelCheck(request.form): return render_template('Error.html')
         return render_template('./Level/submit-level.html')
     
+eval_degree_name = ""
+eval_degree_level = ""
+eval_section_selection = ""
+
 @app.route('/enter-evaluation-init', methods=['GET','POST'])
 def Enter_Eval():
-        return render_template('./Evaluation/enter-eval-getsection.html')
+        
+        if request.method == 'POST':
+            eval_degree_name = request.form['degree']
+            eval_degree_level = request.form['levelName']
+
+        #List of Tuples 
+
+        return render_template('./Evaluation/enter-eval-initial.html')
     
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
-         return render_template('./Evaluation/enter-eval-getLO.html')
+         
+        if request.method == 'POST':
+            
+
+
+         return render_template('./Evaluation/enter-eval-getsection.html')
         
 
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
-         return render_template('./Evaluation/enter-eval-info.html')
+         return render_template('./Evaluation/enter-eval-getLO.html')
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
     #return submission complete
-         return render_template('./Evaluation/submit-eval.html')
+         return render_template('./Evaluation/enter-eval-info.html')
 
+@app.route('/submit-eval', methods = ['POST'])
+def Submit_Eval(): 
+    #return submission complete
+         return render_template('./Evaluation/submit-evaluation.html')
 
 
 """CHECK FUNCTIONS:"""
