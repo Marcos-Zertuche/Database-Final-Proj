@@ -238,6 +238,9 @@ def courseCheck(input):
     # Check if the input is alphabetical
     if not input['courseDeptCode'].isalpha(): return False
 
+       # Check numstudents greater than 0
+    if not int(input['numStudents']) > 0: return False
+
     # Check if input is Shorter than 2 or greater than 4
     if len(input['courseDeptCode']) < 2 or len(input['courseDeptCode']) > 4: return False
 
