@@ -346,3 +346,73 @@ def Section_Exists(dict_info):
     conn.close
     
     return True
+
+def Instructor_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    
+    InstructorID = dict_info['instructorID']
+
+    query = f""" SELECT *  
+                FROM Instructor 
+                WHERE InstructorID = '{InstructorID}' 
+            """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def Degree_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    DegreeName = dict_info['name']
+    DegreeLevel = dict_info['level']
+
+    query = f""" SELECT *  
+                FROM Degree 
+                WHERE DegreeName = '{DegreeName}' 
+                AND DegreeLevel = '{DegreeLevel}'
+            """
+            
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
+
+def Level_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    DegreeLevel = dict_info['levelName']
+
+
+    query = f""" SELECT *  
+                FROM Degree 
+                WHERE DegreeLevel = '{DegreeLevel}' 
+            """
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True

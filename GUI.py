@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -200,6 +200,7 @@ def degreeCheck(input):
     if len(input['level']) > 5: return False
         
     # Tuple Does not exist
+    if Degree_Exists(input): return False
     
     print("Check Passed!")
     return True
@@ -213,6 +214,8 @@ def instructorCheck(input):
             return False
     
     # Check if id is valid
+    if Instructor_Exists(input): return False
+        
     
     print("Check Passed!")
     return True     
@@ -244,12 +247,6 @@ def sectionCheck(input):
     # Check if Course Exists in course table
     if not Course_Exists(input) : return False
     
-    
-    
-    # Do I need degree name/level?
-    
-    
-    
     return True
     
 def learnObjCheck(input):
@@ -260,6 +257,8 @@ def levelCheck(input):
         return False
     
     # Check if the val already exists in table
+    if Level_Exists(input): return False
+
     
     return True
 
