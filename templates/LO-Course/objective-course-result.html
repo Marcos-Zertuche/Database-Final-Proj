@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Per Objective</title>
+</head>
+<body>
+    <h2>Courses Per Objective</h2>
+    {% if objective_courses %}
+        <ul>
+            {% for key, value in objective_courses.items() %}
+                <li>Objective Title: {{ key }}</li>
+                <ul> <!-- Start inner list -->
+                    {% for course in value %}
+                        <li>Course ID: {{ course[0] }}, Name: {{ course[1] }}</li>
+                    {% endfor %}
+                </ul> <!-- End inner list -->
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No objectives found.</p>
+    {% endif %}
+
+    <button onclick="window.location.href='./query'">Go to Query</button>
+</body>
+</html>
