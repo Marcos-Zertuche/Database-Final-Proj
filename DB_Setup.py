@@ -434,3 +434,27 @@ def Level_Exists(dict_info):
     
     return True
 
+def LO_Exists(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor() 
+    
+    Objective_Title =  dict_info["objectiveTitle"]
+    Description = dict_info["objectiveDescription"]
+    Course_ID = dict_info["courseID"]
+
+
+    query = f""" SELECT *  
+                FROM Degree 
+                WHERE DegreeLevel = '{DegreeLevel}' 
+            """
+            
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    print("**********ROWS IN QUERY RETURNED***********\n",rows)
+    if not rows: return False
+    
+    cursor.close
+    conn.close
+    
+    return True
