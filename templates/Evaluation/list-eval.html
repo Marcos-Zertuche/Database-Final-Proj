@@ -12,7 +12,11 @@
         <form action="/eval-result" method="post" class="mb-3">
             <div class="form-group">
                 <label for="semester">Semester:</label>
-                <input type="text" id="semester" name="semester" class="form-control" required>
+                <select id="semester" name="semester" class="form-control" required>
+                    <option value="spring">Spring</option>
+                    <option value="summer">Summer</option>
+                    <option value="fall">Fall</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="year">Year:</label>
@@ -20,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="percentage">Percentage:</label>
-                <input type="number" id="percentage" name="percentage" class="form-control" required>
+                <input type="number" id="percentage" name="percentage" class="form-control">
             </div>
             <input type="submit" value="Submit" class="btn btn-primary">
         </form>
