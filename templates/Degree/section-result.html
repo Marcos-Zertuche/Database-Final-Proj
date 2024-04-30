@@ -7,14 +7,14 @@
 </head>
 <body>
     <h2>Sections</h2>
-    {% if courses %}
+    {% if sections %}
         <ul>
-            {% for course in courses %}
-                <li>Course ID: {{ course[0] }}, Name: {{ course[1] }}, Type: {{ course[2] }}</li>
+            {% for section in sections %}
+                <li>Section ID: {{ section[0] }}, Course ID: {{ section[1] }}</li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>No courses found.</p>
+        <p>No sections found.</p>
     {% endif %}
 
     <button onclick="window.location.href='./query'">Go to Data Entry</button>

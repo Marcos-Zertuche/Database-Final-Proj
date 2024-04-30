@@ -543,9 +543,6 @@ def Section_Result():
             errors.append("Error: Degree Level exceeds 5 characters limit.")
 
         sections = Get_Sections(request.form)
-
-        if sections is None:
-            errors.append("Error: Course ID does not exist in the Course table.")
         
         if errors:
             for error in errors:
