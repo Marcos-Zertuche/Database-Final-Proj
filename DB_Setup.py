@@ -371,7 +371,7 @@ def Insert_Incomplete_Eval(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
     
-    if Eval_Exists(dict_info) : return 
+    # Eval_Objective = 
     
     query = """ INSERT INTO Evaluation(EvalObjective,DegreeName,DegreeLevel,InstructorID,SectionID,Semester,Year,CourseID ) 
                     VALUES(%s, %s , %s ,%s,%s,%s,%s, %s)
@@ -385,43 +385,8 @@ def Insert_Incomplete_Eval(dict_info):
 
     return 
 
-def Complete_Evaluation(dict_info):
-    conn = connect_db()
-    cursor = conn.cursor()
-    
-    print(dict_info)
-    if not Eval_Exists(dict_info) : return 
 
-    for key, value in dict_info.items():
-        if value == '':
-            dict_info[key] = -1
-    
-    # query = f"""UPDATE Player
-    #             SET Rating = {n_info[9]}
-    #             WHERE ID = {n_info[2]}; """
-    
-    query = f"""
-            UPDATE Evaluation
-            SET A = {int(dict_info['A'])} , 
-                B = {int(dict_info['B'])} ,
-                C = {int(dict_info['C'])} ,
-                F = {int(dict_info['F'])} ,
-                EvaluationDescription = '{dict_info['EvaluationDescription']}'
-            WHERE CourseID = '{dict_info['CourseID']}' AND
-                SectionID = '{dict_info['SectionID']}' AND
-                EvalObjective = '{dict_info['EvalObjective']}'
-    """
-    print(query)
-    cursor.execute(query)
-    conn.commit()  # Commit the transaction
-    conn.close()   # Close the connection
-    
-    return 
-    
-    
-    
-    
-    
+
 def Insert_Evaluation(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
@@ -573,7 +538,41 @@ def Section_Exists(dict_info):
     
     return True
 
+def Get_All_Sections(dict_info):
+    semester = dict_info['semester']
+    year = dict_info['year']
 
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT 
+            e.SectionID,
+            e.CourseID,
+            CASE 
+                WHEN e.EvalObjective IS NOT NULL THEN 
+                    CASE 
+                        WHEN e.A IS NOT NULL OR e.B IS NOT NULL OR e.C IS NOT NULL OR e.F IS NOT NULL THEN 'Entered'
+                        ELSE 'Partially Entered'
+                    END
+                ELSE 'Not Entered'
+            END AS EvaluationStatus,
+            CASE 
+                WHEN e.EvaluationDescription IS NOT NULL AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
+                ELSE 'Not Entered'
+            END AS ImprovementStatus
+        FROM 
+            Evaluation e
+        WHERE 
+            e.Semester = %s AND e.Year = %s;
+    """
+
+    cursor.execute(query, (semester, year))
+    sections_info = cursor.fetchall()
+
+    conn.close()
+
+    return sections_info
 
 
 def Instructor_Exists(dict_info):
@@ -869,7 +868,7 @@ def Get_Section_Percentage(dict_info):
 
     Semester = dict_info['semester']
     Year = dict_info['year']
-    Percentage = float(dict_info['percentage'])
+    Percentage = dict_info['percentage']
 
     query = """SELECT SectionID, A, B, C, F, CourseID FROM Evaluation WHERE Semester = %s AND Year = %s"""
     cursor.execute(query, (Semester, Year))
@@ -887,43 +886,3 @@ def Get_Section_Percentage(dict_info):
             sections.append(section)
 
     return sections
-
-
-def Get_All_Sections(dict_info):
-    semester = dict_info['semester']
-    year = dict_info['year']
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    query = """
-        SELECT 
-            e.SectionID,
-            e.CourseID,
-            CASE 
-                WHEN e.EvalObjective <> -1 THEN 
-                    CASE 
-                        WHEN (e.A <> -1 AND e.B <> -1 AND e.C <> -1 AND e.F <> -1) THEN 'Entered'
-                        WHEN (e.A <> -1 OR e.B <> -1 OR e.C <> -1 OR e.F <> -1) THEN 'Partially Entered'
-                        ELSE 'Not Entered'
-                    END
-                ELSE 'Not Entered'
-            END AS EvaluationStatus,
-            CASE 
-                WHEN e.EvaluationDescription <> -1 AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
-                ELSE 'Not Entered'
-            END AS ImprovementStatus
-        FROM 
-            Evaluation e
-        WHERE 
-            e.Semester = %s AND e.Year = %s;
-
-    """
-
-    cursor.execute(query, (semester, year))
-    sections_info = cursor.fetchall()
-    print(sections_info)
-
-    conn.close()
-
-    return sections_info
