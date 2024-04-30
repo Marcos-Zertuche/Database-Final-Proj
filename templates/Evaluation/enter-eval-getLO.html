@@ -10,8 +10,11 @@
     <form id="sectionForm" action="/enter-evaluation-info" method="post">
         <div id="sectionSelection">
             <h3>Select Learning Objective:</h3>
-            <select id="sectionDropdown" name="section">
-                
+            <select id="sectionDropdown" name="objectivetitles">
+                <!-- Iterate over sections and create an option for each -->
+                {% for objectivetitle in objectivetitles %}
+                <option value="{{ objectivetitle }}">Objective Title: {{objectivetitle}}</option>
+                {% endfor %}   
             </select><br>
 <br>
             <input type="submit" value="Submit">

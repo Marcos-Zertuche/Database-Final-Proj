@@ -10,10 +10,10 @@
     <form id="sectionForm" action="/enter-evaluation-LO" method="post">
         <div id="sectionSelection">
             <h3>Select Section:</h3>
-            <select name="section">
+            <select name = "section">
                 <!-- Iterate over sections and create an option for each -->
                 {% for course_id, section_id in sections %}
-                <option value="{{ course_id }}">Course ID: {{ course_id }}, Section ID: {{ section_id }}</option>
+                <option value="{{ course_id }},{{section_id}}">Course ID: {{ course_id }}, Section ID: {{ section_id }}</option>
                 {% endfor %}
             </select>
             <br>

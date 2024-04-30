@@ -1,5 +1,6 @@
 import mysql.connector
 import json
+import pandas as pd
 from flask import jsonify
 
 
@@ -308,6 +309,67 @@ def View_Sections(dict_info):
 
 
 
+def View_Objective_Title(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+   
+    section = dict_info['section'].split(',')[1]
+    course_ID = dict_info['section'].split(',')[0]
+    
+
+    query = """
+        SELECT LearningObjectiveTitle
+        FROM LearningObjective_Course
+        WHERE CourseID = %(courseID)s
+    """
+    cursor.execute(query,{'courseID': course_ID})
+    Objective_Title = cursor.fetchall()
+    print(Objective_Title)
+    return Objective_Title
+
+
+#  CREATE TABLE IF NOT EXISTS Evaluation (
+#             EvalObjective VARCHAR(50),
+#             DegreeName VARCHAR(50),
+#             DegreeLevel VARCHAR(5),
+#             A INT,
+#             B INT,
+#             C INT,
+#             F INT,
+#             EvaluationDescription VARCHAR(500),
+#             InstructorID VARCHAR(8),
+#             SectionID VARCHAR(3),
+#             Semester VARCHAR(6),
+#             Year INT,
+#             CourseID VARCHAR(8),
+#             PRIMARY KEY (SectionID, CourseID, EvalObjective), 
+#             FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+#             FOREIGN KEY (SectionID, Semester, Year) REFERENCES Section(SectionID, Semester, Year), 
+#             FOREIGN KEY (DegreeName, DegreeLevel) REFERENCES Degree(DegreeName, DegreeLevel),
+#             FOREIGN KEY (InstructorID) REFERENCES Instructor(InstructorID)
+#         );
+def Insert_Evaluation(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    A = dict_info["Acount"]
+    B = dict_info["Bcount"]
+    C = dict_info["Ccount"]
+    F = dict_info["Fcount"]
+    improvements = dict_info["improvementSuggestion"]
+    
+
+    query = """INSERT INTO Evaluation(A, B, C, F, EvaluationDescription) VALUES(%s, %s, %s, %s, %s)"""
+    cursor.execute(query, (A, B, C, F, improvements))
+    
+    conn.commit()  # Commit the transaction
+    conn.close()   # Close the connection
+
+    # Optionally, you can return a success message or redirect to another page
+    return "Evaluation data inserted successfully!"
+
+
 
 
 
@@ -605,3 +667,4 @@ def Get_Objectives(dict_info):
     conn.close
     
     return objectives
+

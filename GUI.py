@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, LO_Exists, Get_Objectives, Insert_Core_Class
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -117,26 +117,34 @@ def Enter_Eval():
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
         print(request.form)
-        sections = View_(request.form)
+        sections = View_Sections(request.form)
         print(sections)
         print(sections[0][0])
         print("hello")
         print(sections[0][1])
         return render_template('./Evaluation/enter-eval-getsection.html', sections = sections)
+
         
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
         print(request.form)
-        return render_template('./Evaluation/enter-eval-getLO.html', sections = sections)
+        objectivetitles= View_Objective_Title(request.form)
+        return render_template('./Evaluation/enter-eval-getLO.html', objectivetitles = objectivetitles )
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
+         print(request.form)
+    
          return render_template('./Evaluation/enter-eval-info.html')
 
 
 
 @app.route('/submit-eval', methods = ['POST'])
 def Submit_Eval(): 
+         print(request.form)
+
+         Insert_Evaluation(request.form)
+    #return submission complete
          return render_template('./Evaluation/submit-evaluation.html')
 
 @app.route('/associate-lo-course' , methods=['GET', 'POST'])
