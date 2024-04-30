@@ -189,7 +189,8 @@ def courseCheck(input):
     if int(input['courseNum']) < 1000 or int(input['courseNum']) > 9999: return False
     print("BREAK HERE")
     # Check if Course Name already exists in DB
-    # if not sectionCheck(input): return False
+    if Course_Exists(input): return False
+    # if not sectionCheck(input): return False 
     
     print("Checks passed!")
     return True
@@ -246,7 +247,7 @@ def sectionCheck(input):
     if Section_Exists(input): return False
     
     # Check if Course Exists in course table
-    if not Course_Exists(input) : return False
+    if Course_Exists(input) : return False
     
     return True
     
