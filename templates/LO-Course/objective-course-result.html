@@ -4,14 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Courses Per Objective</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h2>Courses Per Objective</h2>
     {% if objective_courses %}
         <ul>
             {% for key, value in objective_courses.items() %}
-                <li>Objective Title: {{ key }}</li>
-                <ul> <!-- Start inner list -->
+                <li>
+                    Objective Title: {{ key }} 
+                    <button onclick="toggleList(this)">Toggle</button>
+                </li>
+                <ul class="hidden"> <!-- Start inner list, initially hidden -->
                     {% for course in value %}
                         <li>Course ID: {{ course[0] }}, Name: {{ course[1] }}</li>
                     {% endfor %}
@@ -23,5 +31,12 @@
     {% endif %}
 
     <button onclick="window.location.href='./query'">Go to Query</button>
+
+    <script>
+        function toggleList(button) {
+            var ul = button.parentElement.nextElementSibling;
+            ul.classList.toggle("hidden");
+        }
+    </script>
 </body>
 </html>
