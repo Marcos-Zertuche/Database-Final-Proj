@@ -10,7 +10,7 @@
     {% if sections %}
         <ul>
             {% for section in sections %}
-                <li>Section ID: {{ section[0] }}, Course ID: {{ section[1] }}</li>
+                <li>Section ID: {{ section[0] }}, Course ID: {{ section[1] }}, Start Semester: {{section[2]}}, Start Year: {{section[3]}}</li>
             {% endfor %}
         </ul>
     {% else %}

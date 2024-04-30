@@ -21,6 +21,9 @@ def create_tables():
     conn = connect_db()
     cursor = conn.cursor()
 
+    # Drop the sample_table if it exists
+    cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
    # Creating Level table
@@ -478,21 +481,26 @@ def Get_Sections(dict_info):
     Degree_Level = dict_info["level"]
     Start_Semester = dict_info["startSemester"]
     End_Semester = dict_info["endSemester"]
-    Start_Year = dict_info["startYear"]
-    End_Year = dict_info["endYear"]
+    Start_Year = int(dict_info["startYear"])
+    End_Year = int(dict_info["endYear"])
 
-    query = """SELECT s.SectionID, s.courseID
+    query = """SELECT s.SectionID, s.courseID, s.Semester, s.Year
     FROM Section s
     JOIN Course c ON s.CourseID = c.CourseID
     JOIN Degree_Course dc ON c.CourseID = dc.CourseID
     JOIN Degree d ON dc.degreeName = d.degreeName AND dc.degreeLevel = d.degreeLevel
     WHERE d.DegreeName = %s
     AND d.DegreeLevel = %s
-    AND s.Year >= %s AND s.Semester >= %s
-    AND s.Year <= %s AND s.Semester <= %s
-    ORDER BY s.Semester AND s.Year;"""
+    AND (s.Year > %s OR (s.Year = %s AND s.Semester >= %s))
+    AND (s.Year < %s OR (s.Year = %s AND s.Semester <= %s))
+    ORDER BY s.Year, 
+         CASE s.Semester 
+             WHEN "Spring" THEN 0
+             WHEN "Summer" THEN 1
+             WHEN "Fall" THEN 2
+         END;"""
 
-    cursor.execute(query, (Degree_Name, Degree_Level, Start_Year, Start_Semester, End_Year, End_Semester))
+    cursor.execute(query, (Degree_Name, Degree_Level, Start_Year, Start_Year, Start_Semester, End_Year, End_Year, End_Semester))
     sections = cursor.fetchall()
 
     conn.commit()
@@ -915,3 +923,39 @@ def Get_Section_Percentage(dict_info):
             sections.append(section)
 
     return sections
+
+def Get_All_Sections(dict_info):
+    semester = dict_info['semester']
+    year = dict_info['year']
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT 
+            e.SectionID,
+            e.CourseID,
+            CASE 
+                WHEN e.EvalObjective IS NOT NULL THEN 
+                    CASE 
+                        WHEN e.A IS NOT NULL OR e.B IS NOT NULL OR e.C IS NOT NULL OR e.F IS NOT NULL THEN 'Entered'
+                        ELSE 'Partially Entered'
+                    END
+                ELSE 'Not Entered'
+            END AS EvaluationStatus,
+            CASE 
+                WHEN e.EvaluationDescription IS NOT NULL AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
+                ELSE 'Not Entered'
+            END AS ImprovementStatus
+        FROM 
+            Evaluation e
+        WHERE 
+            e.Semester = %s AND e.Year = %s;
+    """
+
+    cursor.execute(query, (semester, year))
+    sections_info = cursor.fetchall()
+
+    conn.close()
+
+    return sections_info
