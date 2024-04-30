@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Insert_Evaluation
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -148,11 +148,18 @@ def Submit_Level():
 def Enter_Eval():
         
         return render_template('./Evaluation/enter-eval-initial.html')
+
+
+       
     
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
         print(request.form)
-        return render_template('./Evaluation/enter-eval-getsection.html')
+        sections = Insert_Evaluation(request.form)
+        print(sections)
+        print("hello")
+        print(sections[0][0])
+        return render_template('./Evaluation/enter-eval-getsection.html', sections = sections)
         
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 

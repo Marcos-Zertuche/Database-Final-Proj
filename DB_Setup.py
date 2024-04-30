@@ -1,5 +1,8 @@
 import mysql.connector
 import json
+import pandas as pd
+from flask import jsonify
+
 
 # Connect to the database
 def connect_db():
@@ -20,7 +23,7 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-    # # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+   # # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -263,6 +266,34 @@ def Insert_Learning_Objective(dict_info):
     conn.commit()
     conn.close
     return
+
+def Insert_Evaluation(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    Instructor_ID = dict_info["instructorID"]
+
+    query = """
+        SELECT CourseID, SectionID
+        FROM section
+        WHERE InstructorID = %(instructorID)s
+    """
+
+    print("SQL query:", query)
+    print("Instructor_ID:", Instructor_ID)
+    cursor.execute(query,{'instructorID': Instructor_ID})
+    sections = cursor.fetchall()
+    
+    print("here is sections + {sections}",sections)
+    cursor.close()
+    conn.close()
+    return sections
+
+
+
+
+
+
 
 def Get_Courses(dict_info):
      
