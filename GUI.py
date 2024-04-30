@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor
+from DB_Setup import Insert_Instructor, Insert_Course
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -55,6 +55,11 @@ def Submit_Course():
     if request.method == 'POST':
         
         if not courseCheck(request.form) or not sectionCheck(request.form): return render_template('./Error.html')
+
+        # Print the form data to the console
+        print(request.form)
+
+        Insert_Course(request.form)
 
         return render_template('./Course/submit-course.html')
 
