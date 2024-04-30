@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Learning_Objective
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -58,11 +58,6 @@ def Submit_Course():
         
         if not courseCheck(request.form) or not sectionCheck(request.form): return render_template('./Error.html')
 
-        # Print the form data to the console
-        print(request.form)
-
-        Insert_Course(request.form)
-
         return render_template('./Course/submit-course.html')
 
 @app.route('/add-instructor', methods=['GET', 'POST'])
@@ -118,6 +113,7 @@ def Submit_LearnObj():
     if request.method == 'POST':
         print(request.form)
         
+        Insert_Learning_Objective(request.form)
         # Print the form data to the console
         if not learnObjCheck(request.form): return render_template('Error.html')
         # You can now use the 'name' and 'email' variables
@@ -133,50 +129,31 @@ def Submit_Level():
     if request.method == 'POST':
         print(request.form)
         
+         
         Insert_Level(request.form)
         # Print the form data to the console
         
         if not levelCheck(request.form): return render_template('Error.html')
         return render_template('./Level/submit-level.html')
     
-eval_degree_name = ""
-eval_degree_level = ""
-eval_section_selection = ""
-
-@app.route('/enter-evaluation-init', methods=['GET','POST'])
+@app.route('/enter-evaluation-init', methods=['POST'])
 def Enter_Eval():
-        
-        if request.method == 'POST':
-            eval_degree_name = request.form['degree']
-            eval_degree_level = request.form['levelName']
-
-        #List of Tuples 
-
-        return render_template('./Evaluation/enter-eval-initial.html')
+        return render_template('./Evaluation/enter-eval-getsection.html')
     
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
-         
-        if request.method == 'POST':
-            
-
-
-         return render_template('./Evaluation/enter-eval-getsection.html')
+         return render_template('./Evaluation/enter-eval-getLO.html')
         
 
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
-         return render_template('./Evaluation/enter-eval-getLO.html')
+         return render_template('./Evaluation/enter-eval-info.html')
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
     #return submission complete
-         return render_template('./Evaluation/enter-eval-info.html')
+         return render_template('./Evaluation/submit-eval.html')
 
-@app.route('/submit-eval', methods = ['POST'])
-def Submit_Eval(): 
-    #return submission complete
-         return render_template('./Evaluation/submit-evaluation.html')
 
 
 """CHECK FUNCTIONS:"""
@@ -466,9 +443,19 @@ def Evaluation_Result():
         if len(year) > 4:
             errors.append("Error: Year exceeds 4 characters limit.")
 
-        # # Check if semester ID exists in the Evaluation table:
-        # query = "SELECT * FROM Evaluation WHERE Semester = %s AND Year = %s"
-        # cursor.execute(query, (semester, year))
+        # Check if semester ID exists in the Evaluation table:
+        semester_id = ''
+        if semester == 'Spring':
+            semester_id += 'SP'
+        elif semester == 'Summer':
+            semester_id += 'SU'
+        else:
+            semester_id += 'FA'
+        semester_id += year
+        print(semester_id)
+        
+        # query = "SELECT * FROM Evaluation WHERE SemesterID = %s"
+        # cursor.execute(query, (semester_id))
 
         # # Fetch the result
         # result = cursor.fetchone()

@@ -236,13 +236,14 @@ def Insert_Learning_Objective(dict_info):
    # Insert into LearningObjective table
     query = """INSERT INTO LearningObjective(ObjectiveTitle, Description) VALUES (%s, %s)"""
     cursor.execute(query, (Objective_Title, Description))
+    conn.commit()
     
     # Insert into LearningObjective_Course table
     query = """INSERT INTO LearningObjective_Course(LearningObjectiveTitle, CourseID) VALUES (%s, %s)"""
     cursor.execute(query, (Objective_Title, Course_ID))
-    
-    
     conn.commit()
+    
+ 
     conn.close
     return
 
