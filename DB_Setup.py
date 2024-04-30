@@ -267,7 +267,7 @@ def Insert_Learning_Objective(dict_info):
     conn.close
     return
 
-def Insert_Evaluation(dict_info):
+def View_Sections(dict_info):
     conn = connect_db()
     cursor = conn.cursor()
 

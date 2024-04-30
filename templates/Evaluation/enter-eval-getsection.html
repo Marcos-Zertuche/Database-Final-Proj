@@ -13,7 +13,7 @@
             <select name="section">
                 <!-- Iterate over sections and create an option for each -->
                 {% for course_id, section_id in sections %}
-                <option value="{{ course_id }}-{{ section_id }}">Course ID: {{ course_id }}, Section ID: {{ section_id }}</option>
+                <option value="{{ course_id }}">Course ID: {{ course_id }}, Section ID: {{ section_id }}</option>
                 {% endfor %}
             </select>
             <br>

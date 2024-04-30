@@ -155,16 +155,16 @@ def Enter_Eval():
 @app.route('/enter-evaluation-section', methods = ['POST'])
 def Eval_Section(): 
         print(request.form)
-        sections = Insert_Evaluation(request.form)
+        sections = View_(request.form)
         print(sections)
         print("hello")
-        print(sections[0][0])
+        print(sections[0][1])
         return render_template('./Evaluation/enter-eval-getsection.html', sections = sections)
         
 @app.route('/enter-evaluation-LO', methods = ['POST'])
 def Eval_LO(): 
-         return render_template('./Evaluation/enter-eval-getLO.html')
-         return render_template('./Evaluation/enter-eval-getLO.html')
+        print(request.form)
+        return render_template('./Evaluation/enter-eval-getLO.html', sections = sections)
 
 @app.route('/enter-evaluation-info', methods = ['POST'])
 def Insert_Eval(): 
