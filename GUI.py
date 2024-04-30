@@ -680,7 +680,8 @@ def Evaluation_Result():
         percentage = request.form['percentage']
 
         if not percentage:
-            Get_All_Sections(request.form)
+            sections_info = Get_All_Sections(request.form)
+            print(sections_info)
 
 
 
