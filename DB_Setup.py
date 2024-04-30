@@ -22,7 +22,7 @@ def create_tables():
     cursor = conn.cursor()
 
     # Drop the sample_table if it exists
-    # cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
+    cursor.execute("DROP TABLE IF EXISTS Level, Degree, Course, Degree_Course, Instructor, LearningObjective, LearningObjective_Course, Section, Evaluation")
 
 #        -- FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
 
@@ -428,20 +428,18 @@ def Get_Sections(dict_info):
     Start_Year = dict_info["startYear"]
     End_Year = dict_info["endYear"]
 
-    query = """
-    SELECT s.SectionID, s.SectionName, s.StartTime, s.EndTime, s.Day
+    query = """SELECT s.SectionID, s.courseID
     FROM Section s
     JOIN Course c ON s.CourseID = c.CourseID
     JOIN Degree_Course dc ON c.CourseID = dc.CourseID
-    JOIN Degree d ON dc.DegreeID = d.DegreeID
+    JOIN Degree d ON dc.degreeName = d.degreeName AND dc.degreeLevel = d.degreeLevel
     WHERE d.DegreeName = %s
-      AND d.DegreeLevel = %s
-      AND s.Year >= %s AND s.Semester >= %s
-      AND s.Year <= %s AND s.Semester <= %s
-    ORDER BY s.StartTime;
-    """
+    AND d.DegreeLevel = %s
+    AND s.Year >= %s AND s.Semester >= %s
+    AND s.Year <= %s AND s.Semester <= %s
+    ORDER BY s.Semester AND s.Year;"""
 
-    cursor.execute(query, (Degree_Name, Degree_Level, Start_Semester, End_Semester, Start_Year, End_Year))
+    cursor.execute(query, (Degree_Name, Degree_Level, Start_Year, Start_Semester, End_Year, End_Semester))
     sections = cursor.fetchall()
 
     conn.commit()

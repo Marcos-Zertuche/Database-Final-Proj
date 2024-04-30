@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, View_Sections, LO_Exists, View_Objective_Title, Insert_Evaluation,Insert_Core_Class, Insert_LO_Course_Association, LO_Course_Exists, Get_Objectives, Get_Objective_Course, Get_Sections
 
 
 app = Flask(__name__)
@@ -518,8 +518,6 @@ def Course_Result():
             errors.append("Error: Course ID does not exist in the Course table.")
         
         if errors:
-            for error in errors:
-                flash(error)
             return render_template('./Course/list-course.html')
         
         sections = Check_Course(request.form)
@@ -528,17 +526,8 @@ def Course_Result():
         # If all checks pass, render the course-result.html template
         return render_template('./Course/course-result.html', sections=sections)
 
-    @app.route('/section-result', methods=['POST'])    
-    def Section_Result():
-        if request.method == 'POST':
-        # Print the form data to the console
-            print(request.form)
-            print(f"Course ID: {request.form['courseID']}")
-            print(f"Start Semester: {request.form['startSemester']}")
-            print(f"Start Year: {request.form['startYear']}")
-            print(f"End Semester: {request.form['endSemester']}")
-            print(f"End Year: {request.form['endYear']}")
-        
+@app.route('/section-result', methods=['POST'])    
+def Section_Result():
         # Get the form data
         degree_name = request.form['name']
         degree_level = request.form['level']
@@ -553,9 +542,9 @@ def Course_Result():
         if len(degree_level) > 5:
             errors.append("Error: Degree Level exceeds 5 characters limit.")
 
-        
+        sections = Get_Sections(request.form)
 
-        if result is None:
+        if sections is None:
             errors.append("Error: Course ID does not exist in the Course table.")
         
         if errors:
@@ -563,7 +552,6 @@ def Course_Result():
                 flash(error)
             return render_template('./Degree/section-result.html')
         
-        sections = Get_Sections(request.form)
         print(sections)
 
         # If all checks pass, render the course-result.html template
