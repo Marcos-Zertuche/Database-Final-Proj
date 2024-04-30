@@ -1,6 +1,5 @@
 import mysql.connector
 import json
-import pandas as pd
 from flask import jsonify
 
 
@@ -709,3 +708,39 @@ def Get_Objectives(dict_info):
     
     return objectives
 
+def Get_Objective_Course(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    Degree_Name =  dict_info["name"]
+    Degree_Level = dict_info["level"]
+    
+    query = """SELECT CourseID FROM Degree_Course WHERE DegreeName = %s AND DegreeLevel = %s"""
+    cursor.execute(query, (Degree_Name,Degree_Level))
+    courses = cursor.fetchall()
+    print(courses)
+
+    objectives = {}
+    for course in courses:
+        query = """SELECT LearningObjectiveTitle FROM LearningObjective_Course WHERE CourseID = %s"""
+        cursor.execute(query, (course[0],))
+        course_objectives = cursor.fetchall()
+        print(course_objectives)
+
+        for objective in course_objectives:
+            # Check if the objective already exists in the dictionary
+            if objective[0] not in objectives:
+                # If it doesn't exist, add it as a key with an empty list
+                objectives[objective[0]] = []
+            # Append the course ID to the list for this objective key
+            if course[0] not in objectives[objective[0]]:
+                query = """SELECT CourseName FROM Course WHERE CourseID = %s"""
+                cursor.execute(query, (course[0],))
+                course_name = cursor.fetchone()
+                objectives[objective[0]].append((course[0], course_name[0]))
+
+    print(objectives)
+
+    conn.close
+    
+    return objectives
