@@ -1,6 +1,5 @@
 import mysql.connector
 import json
-import pandas as pd
 from flask import jsonify
 
 
@@ -556,3 +555,30 @@ def Check_Instructor(dict_info):
     conn.close()
 
     return sections
+
+def Get_Objectives(dict_info):
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    Degree_Name =  dict_info["name"]
+    Degree_Level = dict_info["level"]
+    
+    query = """SELECT CourseID FROM Degree_Course WHERE DegreeName = %s AND DegreeLevel = %s"""
+    cursor.execute(query, (Degree_Name,Degree_Level))
+    courses = cursor.fetchall()
+    print(courses)
+
+    objectives = []
+    for course in courses:
+        query = """SELECT LearningObjectiveTitle FROM LearningObjective_Course WHERE CourseID = %s"""
+        cursor.execute(query, (course[0],))
+        course_objectives = cursor.fetchall()
+        print(course_objectives)
+
+        for objective in course_objectives:
+            if objective[0] not in objectives:
+                objectives.append(objective[0])
+
+    conn.close
+    
+    return objectives

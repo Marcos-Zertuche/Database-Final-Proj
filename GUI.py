@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
-from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor , LO_Exists
+from DB_Setup import Insert_Instructor, Insert_Degree, Insert_Level, Insert_Course, Insert_Learning_Objective, connect_db, Check_Course, Insert_Section , Course_Exists , Section_Exists, Instructor_Exists, Degree_Exists , Level_Exists, Insert_Course,Insert_Section, Get_Courses, Check_Instructor, LO_Exists, Get_Objectives
 
 app = Flask(__name__)
 app.secret_key = 'oui'  # Add a secret key for flash messages
@@ -296,27 +296,83 @@ def Degree_Result():
         if len(degree_level) > 5:
             errors.append("Error: Degree Level exceeds 5 characters limit.")
 
-        courses = Get_Courses(request.form)
+        # Check if the combination exists in the Degree table:
+        conn = connect_db()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Degree WHERE DegreeName = %s AND DegreeLevel = %s"
+        cursor.execute(query, (degree_name, degree_level))
 
-        # # Check if the combination exists in the Degree table:
-        # query = "SELECT * FROM Degree WHERE DegreeName = %s AND DegreeLevel = %s"
-        # cursor.execute(query, (degree_name, degree_level))
+        # Fetch the result
+        result = cursor.fetchone()
 
-        # # Fetch the result
-        # result = cursor.fetchone()
+        conn.close()
 
-        # conn.close()
-
-        # if result is None:
-        #     errors.append("Error: Combination of Degree Name and Level does not exist in the Degree table.")
+        if result is None:
+            errors.append("Error: Combination of Degree Name and Level does not exist in the Degree table.")
         
         if errors:
             for error in errors:
                 flash(error)
             return render_template('./Degree/list-degree.html')
+        
+        courses = Get_Courses(request.form)
 
         # If all checks pass, render the degree-result.html template
         return render_template('./Degree/degree-result.html', courses = courses)
+    
+
+@app.route('/list-objectives', methods=['GET'])
+def List_Objectives():
+    if request.method == 'GET':
+        # If it's a GET request, render the form for the user to fill out
+        return render_template('./Learning-Objective/list-objectives.html')
+
+
+@app.route('/objectives-result', methods=['POST'])    
+def Objectives_Result():
+    if request.method == 'POST':
+        # Print the form data to the console
+        print(request.form)
+        print(f"Degree Name: {request.form['name']}")
+        print(f"Degree Level: {request.form['level']}")
+        
+        # Get the form data
+        degree_name = request.form['name']
+        degree_level = request.form['level']
+
+        errors = []  # Initialize an empty list to store errors
+
+        # Check if Degree Name conforms to restrictions (DegreeName VARCHAR(50))
+        if len(degree_name) > 50:
+            errors.append("Error: Degree Name exceeds 50 characters limit.")
+
+        # Check if Degree Level conforms to restrictions (DegreeLevel VARCHAR(5))
+        if len(degree_level) > 5:
+            errors.append("Error: Degree Level exceeds 5 characters limit.")
+
+        # Check if the combination exists in the Degree table:
+        conn = connect_db()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Degree WHERE DegreeName = %s AND DegreeLevel = %s"
+        cursor.execute(query, (degree_name, degree_level))
+
+        # Fetch the result
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result is None:
+            errors.append("Error: Combination of Degree Name and Level does not exist in the Degree table.")
+        
+        if errors:
+            for error in errors:
+                flash(error)
+            return render_template('./Learning-Objective/list-objectives.html')
+        
+        objectives = Get_Objectives(request.form)
+
+        # If all checks pass, render the objectives-result.html template
+        return render_template('./Learning-Objective/objectives-result.html', objectives = objectives)
 
 
 @app.route('/list-course', methods=['GET'])

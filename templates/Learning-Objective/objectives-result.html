@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objectives</title>
+</head>
+<body>
+    <h2>Objectives</h2>
+    {% if objectives %}
+        <ul>
+            {% for objective in objectives %}
+                <li>Objective Title: {{ objective }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No objectives found.</p>
+    {% endif %}
+
+    <button onclick="window.location.href='./query'">Go to Query</button>
+</body>
+</html>
