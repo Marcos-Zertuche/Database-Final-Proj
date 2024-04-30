@@ -574,6 +574,8 @@ def Section_Exists(dict_info):
     return True
 
 
+
+
 def Instructor_Exists(dict_info):
     conn = connect_db()
     cursor = conn.cursor() 
