@@ -1,7 +1,7 @@
 # Database-Final-Proj
 
 ## Description
-This project aims to implement a database solution. using mySQL as the backend, to store and evaluate university degree programs.
+This project aims to implement a database solution, using mySQL as the backend, to store and evaluate university degree programs.
 
 ## Installation
 
@@ -73,4 +73,4 @@ To run the application, navigate to the project directory in the command prompt 
 python DB_Setup.py
 python GUI.py
 ```
-This will create the appropriate tables in the '**db_final_project**' database and then start the Flask application, and you should be able to access it through a web browser at '**http://127.0.0.1:5000**'.
+This will create the appropriate tables in the '**db_final_project**' database and then start the Flask application. You should be able to access it through a web browser at '**http://127.0.0.1:5000**'.
