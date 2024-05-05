@@ -3,6 +3,11 @@
 ## Description
 This project aims to implement a database solution, using mySQL as the backend, to store and evaluate university degree programs.
 
+
+
+## Database Schema
+![Database Schema](./DB-Final-Project-Schema.png)
+
 ## Installation
 
 ### Python
