@@ -124,7 +124,7 @@ The following section will teach you the order in which you are allowed to add e
 
 - Then, choose the Learning Objective that this Evaluation is assesing (we have only created one Learning Objective thus far):
 
-![Screenshot 2024-05-05 at 7 32 00 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/4a287f6f-ef7d-45a6-b282-7f8bab2fdbde)
+![Screenshot 2024-05-05 at 11 07 36 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/d75a90fd-7fd7-41c8-b841-bf7d4b2eca17)
 
 - Lastly, enter the grade distribution among the students for that specific Section. Note that entries can be left blank for now and updated later by going through this same process and entering the exact same information:
 
