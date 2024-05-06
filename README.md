@@ -150,8 +150,24 @@ The following section will teach you the order in which you are allowed to add e
 
 ![Screenshot 2024-05-05 at 8 26 32 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/3d6ad30d-9947-4c32-8f65-8c52173cb4d5)
 
+### Query
+We have gone over all the functionalities of the Data-Entry portion. Now let's explore how we can retrieve all the information we have stored.
 
+#### List Courses Given Degree:
+- Provide Degree Name and Level to retrieve all Courses associated with the Degree, as well as whether the Course is a Core Course or not:
 
+![Screenshot 2024-05-05 at 10 13 40 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/65ccc5b6-5eda-4cda-8475-a85e66a3786f)
+
+![Screenshot 2024-05-05 at 10 13 24 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/a8f114ab-4b60-412f-8137-8033c409809f)
+
+#### List Sections Given Degree:
+- Provide Degree Name, Level, and a time range to retrieve all Sections offered in chronological order:
+
+![Screenshot 2024-05-05 at 10 15 42 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/0ee68d1f-3425-4bca-a84b-e8518b5d253a)
+
+![Screenshot 2024-05-05 at 10 15 49 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/0e9ab0fa-adbc-405e-b9c1-3d61b2f1295a)
+
+#### List 
 
 
 
