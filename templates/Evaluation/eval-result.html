@@ -6,43 +6,25 @@
     <title>Percentage Result</title>
 </head>
 <body>
-    {% if percentage %}
-    <h1>Percentage Result</h1>
+    <h1>Percentage Result For: {{ percentage }}%</h1>
         {% if sections %}
             <h2>Sections:</h2>
             <ul>
                 {% for section in sections %}
                     <li>
-                        <strong>Section ID:</strong> {{ section[0] }}, 
-                        <strong>Semester:</strong> {{ section[1] }}, 
-                        <strong>Year:</strong> {{ section[2] }}, 
-                        <strong>Course ID:</strong> {{ section[3] }}, 
-                        <strong>Capacity:</strong> {{ section[4] }}, 
-                        <strong>Instructor:</strong> {{ section[5] }}
+                        <strong>Section ID:</strong> {{ section[0][0] }}, 
+                        <strong>Semester:</strong> {{ section[0][1] }}, 
+                        <strong>Year:</strong> {{ section[0][2] }}, 
+                        <strong>Course ID:</strong> {{ section[0][3] }}, 
+                        <strong>Capacity:</strong> {{ section[0][4] }}, 
+                        <strong>Instructor:</strong> {{ section[0][5] }},
+                        <strong>Percentage:</strong> {{ section[1] }}
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
             <p>No sections found that met the desired percentage.</p>
         {% endif %}
-    {% else %}
-        <h1>All Sections</h1>
-        {% if sections %}
-            <h2>Sections:</h2>
-            <ul>
-                {% for section in sections %}
-                    <li>
-                        <strong>Section ID:</strong> {{ section[0] }}, 
-                        <strong>Course ID:</strong> {{ section[1] }}, 
-                        <strong>Evaluation Objective:</strong> {{ section[2] }}, 
-                        <strong>Evaluation Description:</strong> {{ section[3] }} 
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No sections found.</p>
-        {% endif %}
-    {% endif %}
 
     <button onclick="window.location.href='./query'">Go to Query</button>
 </body>

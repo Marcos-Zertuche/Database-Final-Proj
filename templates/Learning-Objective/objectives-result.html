@@ -10,7 +10,7 @@
     {% if objectives %}
         <ul>
             {% for objective in objectives %}
-                <li><strong>Objective Title:</strong> {{ objective }}</li>
+                <li><strong>Objective Title:</strong> {{ objective[0] }}, <strong>Objective Code:</strong> {{ objective[1] }}, <strong>Description:</strong> {{ objective[2] }}</li>
             {% endfor %}
         </ul>
     {% else %}

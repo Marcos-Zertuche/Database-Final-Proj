@@ -263,7 +263,7 @@ def degreeCheck(input):
     # If level does not exist
     level_input = { 'levelName' : input['level'] }
     
-    if Level_Exists(level_input): return False
+    if not Level_Exists(level_input): return False
     # Tuple exist
     if Degree_Exists(input): return False
 
@@ -717,11 +717,7 @@ def Evaluation_Result():
                 flash(error)
             return render_template('./Evaluation/list-eval.html')
         
-
-        if not percentage:
-            sections = Get_All_Sections(request.form)
-        else:
-            sections = Get_Section_Percentage(request.form)
+        sections = Get_Section_Percentage(request.form)
 
         # If all checks pass, render the eval-result.html template
         return render_template('./Evaluation/eval-result.html', sections=sections, percentage=percentage)
