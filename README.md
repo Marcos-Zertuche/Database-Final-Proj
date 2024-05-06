@@ -195,5 +195,21 @@ We have gone over all the functionalities of the Data-Entry portion. Now let's e
 
 ![Screenshot 2024-05-05 at 10 24 25 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/5038aede-6373-4215-bb02-177bb16fdba4)
 
+#### List Sections Given Semester/Percentage:
+- Provide semester, year, and a percentage value to retrieve all Sections where the number of students that did not get the ‘**F**’ grade reached that percentage. In '**Section 001**' of Course '**CS5330**', **28** out of the **30** students did not get the '**F**' grade (~**93.33%**). Let's choose a value above and below this percentage to see how this query will return.
+
+- Choosing a percentage value of '**95**':
+
+![Screenshot 2024-05-05 at 10 28 48 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/9c51bc11-ed8f-46f3-a71a-99a12c5fc0cc)
+
+![Screenshot 2024-05-05 at 10 28 54 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/b26d0a0c-4154-418b-8611-c77977c02940)
+
+- Choosing a percentage value of '**90**':
+
+![Screenshot 2024-05-05 at 10 29 46 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/9334889a-6a66-417e-9ca5-9dd29c55aaae)
+
+![Screenshot 2024-05-05 at 10 29 55 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/82041c3a-9a3d-4c52-8ca2-6775e1b1bb4f)
+
+
 
 
