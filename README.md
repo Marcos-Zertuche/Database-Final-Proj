@@ -83,39 +83,39 @@ This will create the appropriate tables in the '**db_final_project**' database a
 ### Data Entry
 The following section will teach you the order in which you are allowed to add entries to the database. Certain entities are dependent on the existence of other entities, such as Section and Course, so those other entities have to be created first. Feel free to open MySQL Command Line Client to verify that the various information have been correctly entered and stored into the database.
 
-#### Add a Level
+#### Add a Level:
 - For a Degree to exist, you must first define a Level (BA, BS, MS, Ph.D., Cert, etc.):
 
 ![Screenshot 2024-05-05 at 6 48 36 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/fcf19dca-8a35-4162-a0bb-387e89e9abe9)
 
-#### Add a Degree
+#### Add a Degree:
 - Now that a Level exists, you can define a Degree with that Level:
 
 ![Screenshot 2024-05-05 at 6 52 03 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/4ccbc63a-dc8c-4cd8-8aef-77bc5fd24c2f)
 
-#### Add an Instructor
+#### Add an Instructor:
 - Before you can start creating Courses, you must first define some Instructors to teach those Courses:
 
 ![Screenshot 2024-05-05 at 6 56 59 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/53d63028-1794-4f32-a931-4125be66b050)
 
-#### Add a Course
+#### Add a Course:
 - Let's assign that Instructor you just created to a new Course:
     - Fill out the necessary Course details (ensure the Degree Name and Level matches an existing Degree and Level) and note whether the Course is a Core Course or not. 
     - A Course requires a Section to exist so when you create a new Course, you must also create a new Section for it (ensure the Instructor ID matches an existing Instructor ID).
 
 ![Screenshot 2024-05-05 at 7 05 05 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/adf3c50f-8f4a-4ec2-bf08-0ca7d43942c7)
 
-#### Add a Section
+#### Add a Section:
 - A Course may have more than one Section, so let's add another Section to the Course we just created:
 
 ![Screenshot 2024-05-05 at 7 14 23 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/ccd27899-3480-4fa1-a01b-a61b46b1351b)
 
-#### Add a Learning Objective
+#### Add a Learning Objective:
 - To evaluate a Degree program, we must define Learning Objectives that their Courses will be evaluated on:
 
 ![Screenshot 2024-05-05 at 7 21 03 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/fb0f46d7-7979-4a35-a0b8-4c5efe3ab27e)
 
-#### Add an Evaluation
+#### Add an Evaluation:
 - With all the necessary components for an Evaluation created, let's now submit an Evaluation. First, enter the Degree Name, Degree Level, Semester, Year, and Instructor ID for the Course under evaluation:
 
 ![Screenshot 2024-05-05 at 7 26 44 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/c282d525-2c1e-4555-83b7-d2ae53a5570a)
@@ -132,7 +132,7 @@ The following section will teach you the order in which you are allowed to add e
 
 ![Screenshot 2024-05-05 at 7 35 45 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/37be0562-a138-472e-a14a-f04d551b8959)
 
-#### Associate an Existing Learning Objective to a Course
+#### Associate an Existing Learning Objective to a Course:
 - A Course may want to associate an existing Learning Objective with it. To show this, let's first create another Course:
 
 ![Screenshot 2024-05-05 at 7 49 35 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/811407d2-1b0d-48d6-8228-2c2a3c1abae3)
@@ -141,13 +141,14 @@ The following section will teach you the order in which you are allowed to add e
 
 ![Screenshot 2024-05-05 at 7 51 56 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/403d45a5-40bb-4391-b11a-de593a54b75d)
 
-#### Assign Existing Course to a Degree
+#### Assign Existing Course to a Degree:
 - A Course may be part of the curriculum of multiple Degrees. We can establish these associations by entering the Course ID (department code + course number) and the Degree Name and Level. First, let's create a new Degree:
 
 ![Screenshot 2024-05-05 at 7 58 06 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/91a35a22-5cc2-4a80-93a1-12b5c47cf383)
 
-- 
+- Associate our '**CS5330**' Course with this new Degree:
 
+![Screenshot 2024-05-05 at 8 26 32 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/3d6ad30d-9947-4c32-8f65-8c52173cb4d5)
 
 
 
