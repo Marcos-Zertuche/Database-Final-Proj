@@ -579,42 +579,6 @@ def Section_Exists(dict_info):
     
     return True
 
-def Get_All_Sections(dict_info):
-    semester = dict_info['semester']
-    year = dict_info['year']
-
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    query = """
-        SELECT 
-            e.SectionID,
-            e.CourseID,
-            CASE 
-                WHEN e.EvalObjective IS NOT NULL THEN 
-                    CASE 
-                        WHEN e.A IS NOT NULL OR e.B IS NOT NULL OR e.C IS NOT NULL OR e.F IS NOT NULL THEN 'Entered'
-                        ELSE 'Partially Entered'
-                    END
-                ELSE 'Not Entered'
-            END AS EvaluationStatus,
-            CASE 
-                WHEN e.EvaluationDescription IS NOT NULL AND CHAR_LENGTH(e.EvaluationDescription) > 0 THEN 'Entered'
-                ELSE 'Not Entered'
-            END AS ImprovementStatus
-        FROM 
-            Evaluation e
-        WHERE 
-            e.Semester = %s AND e.Year = %s;
-    """
-
-    cursor.execute(query, (semester, year))
-    sections_info = cursor.fetchall()
-
-    conn.close()
-
-    return sections_info
-
 
 def Instructor_Exists(dict_info):
     conn = connect_db()
@@ -937,7 +901,6 @@ def Get_Section_Percentage(dict_info):
             sections.append((section, passing_percentage))
 
     return sections
-
 
 
 def Get_All_Sections(dict_info):
