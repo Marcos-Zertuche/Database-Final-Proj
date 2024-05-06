@@ -8,7 +8,62 @@ This project aims to implement a database solution, using mySQL as the backend, 
 
 ## Table Breakdown
 
-##### Tables 5-9
+
+### Level Table
+The Level table stores the levels the user wants to create for its degrees. They are unique by their name (DegreeLevel), and are restricted to 5 character names. To create any degrees, there needs to be at least one level in this table.
+```
+CREATE TABLE IF NOT EXISTS Level (
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeLevel)
+        )
+```
+### Degree Table
+This table stores all information for degrees being created. The individual degrees being created are unique by the combination of Degree Name and Degree Level. This table has a foreign key to the Level table on DegreeLevel, ensuring that whenever we create a new degree, that level exists in the Level table.
+
+```
+ CREATE TABLE IF NOT EXISTS Degree (
+            DegreeName VARCHAR(50),
+            DegreeLevel VARCHAR(5),
+            PRIMARY KEY (DegreeName, DegreeLevel),
+            FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
+ )
+```
+### Course Table
+This table stores the information for any course created by the user, using the course code as the primary key. Having this table allowed us to restrict any sections that are created to be associated with a course in this table, and any degree-course relationshops created to have a course with that ID in this course table.
+```
+CREATE TABLE IF NOT EXISTS Course (
+            CourseID VARCHAR(8),
+            CourseName VARCHAR(50),
+            PRIMARY KEY (CourseID)
+        );
+```
+
+### Degree_Course Table
+This table stores the information for when a course is assigned to a degree. This table is unique by the Degree Name, Degree Level, CourseID, and whether or not the class is a core class in the given degree. Having this table allowed us to assign one class to multiple degrees, and designate whether that course is a core course or not in that degree specifically. The foreign key references ensure that the Degree Names, Degree Levels, and Courses being input in this table are defined in their respective tables. 
+
+```
+CREATE TABLE IF NOT EXISTS Degree_Course (
+        DegreeName VARCHAR(50),
+        DegreeLevel VARCHAR(5),
+        CourseID VARCHAR(8),
+        IsCore BOOLEAN,
+        PRIMARY KEY (DegreeName, DegreeLevel, CourseID, IsCore),
+        FOREIGN KEY (CourseID) REFERENCES Course(CourseID),
+        FOREIGN KEY (DegreeName) REFERENCES Degree(DegreeName),
+        FOREIGN KEY (DegreeLevel) REFERENCES Level(DegreeLevel)
+    )
+```
+### Instructor Table
+- This table stores the information for instructors. Each individual instructor that is created is required to put in their unique InstructorID and their name. This is the collection of instructors that can be assigned to the sections found in the Section table.
+
+```
+CREATE TABLE IF NOT EXISTS Instructor (
+            InstructorID VARCHAR(8),
+            InstructorName VARCHAR(50),
+            PRIMARY KEY (InstructorID)
+)
+```
+
 
 ### Learning Objective Table
 
