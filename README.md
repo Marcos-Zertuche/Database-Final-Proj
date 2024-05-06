@@ -210,6 +210,10 @@ We have gone over all the functionalities of the Data-Entry portion. Now let's e
 
 ![Screenshot 2024-05-05 at 10 29 55 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/82041c3a-9a3d-4c52-8ca2-6775e1b1bb4f)
 
+#### List Sections & Evaluation Status Given Semester:
+- Provide semester and year to retrieve all Sections and for each section, state whether the Evaluation objectives have been entered, partially entered, or not entered at all (in regards to A, B, C, F and not the optional Improvement paragraph).
 
+![Screenshot 2024-05-05 at 10 33 27 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/4f952308-1b40-488f-9650-7190b6642228)
 
+![Screenshot 2024-05-05 at 10 33 39 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/b5934133-56f4-4d1c-9160-fa170991b7cc)
 
