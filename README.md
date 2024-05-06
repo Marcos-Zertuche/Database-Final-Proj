@@ -111,28 +111,46 @@ The following section will teach you the order in which you are allowed to add e
 ![Screenshot 2024-05-05 at 7 14 23 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/ccd27899-3480-4fa1-a01b-a61b46b1351b)
 
 #### Add a Learning Objective
-To evaluate a Degree program, we must define Learning Objectives that their Courses will be evaluated on:
+- To evaluate a Degree program, we must define Learning Objectives that their Courses will be evaluated on:
 
 ![Screenshot 2024-05-05 at 7 21 03 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/fb0f46d7-7979-4a35-a0b8-4c5efe3ab27e)
 
 #### Add an Evaluation
-With all the necessary components for an Evaluation created, let's now submit an Evaluation. First, enter the Degree Name, Degree Level, Semester, Year, and Instructor ID for the Course under evaluation:
+- With all the necessary components for an Evaluation created, let's now submit an Evaluation. First, enter the Degree Name, Degree Level, Semester, Year, and Instructor ID for the Course under evaluation:
 
 ![Screenshot 2024-05-05 at 7 26 44 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/c282d525-2c1e-4555-83b7-d2ae53a5570a)
 
-Next, select the Section for which this Evaluation is associated with. We will choose '**Section 001**' for this example run:
+- Next, select the Section for which this Evaluation is associated with. We will choose '**Section 001**' for this example run:
 
 ![Screenshot 2024-05-05 at 7 30 20 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/70e34121-7f21-410b-b84c-f178d633352d)
 
-Then, choose the Learning Objective that this Evaluation is assesing (we have only created one Learning Objective thus far):
+- Then, choose the Learning Objective that this Evaluation is assesing (we have only created one Learning Objective thus far):
 
 ![Screenshot 2024-05-05 at 7 32 00 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/4a287f6f-ef7d-45a6-b282-7f8bab2fdbde)
 
-Lastly, enter the grade distribution among the students for that specific Section. Note that entries can be left blank for now and updated later by going through this same process and entering the exact same information:
+- Lastly, enter the grade distribution among the students for that specific Section. Note that entries can be left blank for now and updated later by going through this same process and entering the exact same information:
 
 ![Screenshot 2024-05-05 at 7 35 45 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/37be0562-a138-472e-a14a-f04d551b8959)
 
-#### Associate a Learning Objective to a Course
-A Course may have more than one Learning Objective 
+#### Associate an Existing Learning Objective to a Course
+- A Course may want to associate an existing Learning Objective with it. To show this, let's first create another Course:
+
+![Screenshot 2024-05-05 at 7 49 35 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/811407d2-1b0d-48d6-8228-2c2a3c1abae3)
+
+- Now we can associate our existing Learning Objective '**Querying**' to this new Course:
+
+![Screenshot 2024-05-05 at 7 51 56 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/403d45a5-40bb-4391-b11a-de593a54b75d)
+
+#### Assign Existing Course to a Degree
+- A Course may be part of the curriculum of multiple Degrees. We can establish these associations by entering the Course ID (department code + course number) and the Degree Name and Level. First, let's create a new Degree:
+
+![Screenshot 2024-05-05 at 7 58 06 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/91a35a22-5cc2-4a80-93a1-12b5c47cf383)
+
+- 
+
+
+
+
+
 
 
