@@ -181,9 +181,19 @@ We have gone over all the functionalities of the Data-Entry portion. Now let's e
 
 ![Screenshot 2024-05-05 at 10 19 57 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/3be147be-7e27-4ea8-ab40-289c0b1ac1f3)
 
+#### List Sections Given Course:
+- Provide Course ID (department code + course number) and time range to retrieve all Sections under the Course:
 
+![Screenshot 2024-05-05 at 10 22 35 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/f2f4f30d-5323-4e58-b4c2-7b49ef9fd9c7)
 
+![Screenshot 2024-05-05 at 10 21 46 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/bb778cac-14dd-4e2a-a542-4223539994fa)
 
+#### List Sections Given Instructor:
+- Provide Instructor ID and time range to retrieve all Sections that he/she has taught:
+
+![Screenshot 2024-05-05 at 10 24 15 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/f9cd4967-3898-4544-922c-d8df1a53b871)
+
+![Screenshot 2024-05-05 at 10 24 25 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/5038aede-6373-4215-bb02-177bb16fdba4)
 
 
 
