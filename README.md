@@ -167,7 +167,23 @@ We have gone over all the functionalities of the Data-Entry portion. Now let's e
 
 ![Screenshot 2024-05-05 at 10 15 49 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/0e9ab0fa-adbc-405e-b9c1-3d61b2f1295a)
 
-#### List 
+#### List Learning Objectives Given Degree:
+- Provide Degree Name and Level to retrieve all Learning Objectives associated with the Degree:
+
+![Screenshot 2024-05-05 at 10 17 29 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/f13c0ea6-b470-4b61-8e3f-d051be6e93a2)
+
+![Screenshot 2024-05-05 at 10 17 36 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/f4d32827-9e12-468d-a092-cf16c6ce21e0)
+
+#### List Courses Per Objective Given Degree:
+- Provide Degree Name and Level to retrive all Learning Objectives and for each Objective, list the Courses associated with it (can toggle which Objective's Courses to be shown):
+
+![Screenshot 2024-05-05 at 10 19 47 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/193d21c6-45e8-404e-9754-76a603468ccf)
+
+![Screenshot 2024-05-05 at 10 19 57 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/3be147be-7e27-4ea8-ab40-289c0b1ac1f3)
+
+
+
+
 
 
 
