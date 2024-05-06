@@ -14,7 +14,7 @@
                 <select id="sectionDropdown" name="objectivetitles">
                     <!-- Iterate over sections and create an option for each -->
                     {% for objectivetitle in objectivetitles %}
-                    <option value="{{ objectivetitle }}">Objective Title: {{objectivetitle}}</option>
+                    <option value="{{ objectivetitle }}">Objective Title: {{objectivetitle[0]}}</option>
                     {% endfor %}   
                 </select><br>
                 <br>
