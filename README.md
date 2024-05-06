@@ -215,4 +215,4 @@ We have gone over all the functionalities of the Data-Entry portion. Now let's e
 
 ![Screenshot 2024-05-05 at 10 33 39 PM](https://github.com/Marcos-Zertuche/Database-Final-Proj/assets/108942845/b5934133-56f4-4d1c-9160-fa170991b7cc)
 
-## That is all!
+## That is all! :D
